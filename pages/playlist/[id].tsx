@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/layout'
 import React from 'react'
 import GradientLayout from '../../components/GradientLayout'
 import SongTable from '../../components/SongTable'
@@ -18,17 +17,28 @@ const Playlist = ({ playlist }) => {
       title={playlist.name}
       subtitle='playlist'
       description={`${playlist.songs.length} songs`}>
-      <SongTable />
+      <SongTable songs={playlist.songs} />
     </GradientLayout>
   )
 }
 
 export const getServerSideProps = async ({ query, req }) => {
-  const { id } = validateToken(req.cookies.SPOOTIK_ACCESS_TOKEN)
+  let user
+  try {
+    user = validateToken(req.cookies.SPOOTIK_ACCESS_TOKEN)
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/signin',
+      },
+    }
+  }
+
   const [playlist] = await prisma.playlist.findMany({
     where: {
       id: +query.id,
-      userId: id,
+      userId: user.id,
     },
     include: {
       songs: {
