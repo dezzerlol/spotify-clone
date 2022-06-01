@@ -45,5 +45,6 @@ module.exports = {
     'react/self-closing-comp': 'off',
     'react/require-default-props': 'off',
     'jsx-a11y/aria-proptypes': 'off',
+    'jsx-a11y/anchor-is-valid': 'off',
   },
 }
