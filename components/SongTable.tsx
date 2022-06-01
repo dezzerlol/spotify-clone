@@ -4,6 +4,7 @@ import { useStoreActions } from 'easy-peasy'
 import React from 'react'
 import { AiOutlineClockCircle } from 'react-icons/ai'
 import { BsFillPlayFill } from 'react-icons/bs'
+import { HiHeart } from 'react-icons/hi'
 import { formatDate, formatTime } from '../lib/formatter'
 
 const SongTable = ({ songs }) => {
@@ -18,7 +19,7 @@ const SongTable = ({ songs }) => {
   return (
     <Box bg='transparent' color='white'>
       <Box padding='10px' marginBottom='20px'>
-        <Box marginBottom='30px' marginLeft='10px'>
+        <Box marginBottom='30px' marginLeft='10px' display='flex' alignItems='center'>
           <IconButton
             icon={<BsFillPlayFill fontSize='30px' />}
             colorScheme='green'
@@ -26,7 +27,9 @@ const SongTable = ({ songs }) => {
             isRound
             aria-label='play'
             onClick={() => handlePlay()}
+            mr='25px'
           />
+          <IconButton icon={<HiHeart fontSize='40px' color='#1DB954' />} size='lg' aria-label='fav' variant='link' />
         </Box>
         <Table variant='unstyled'>
           <Thead borderBottom='1px solid' borderColor='rgba(255,255,255, 0.2)'>
@@ -42,7 +45,8 @@ const SongTable = ({ songs }) => {
 
           <Tbody>
             {songs.map((song, index) => (
-              <Tr onClick={() => handlePlay(song)}
+              <Tr
+                onClick={() => handlePlay(song)}
                 sx={{ transition: 'all 0.3s', '&:hover': { bg: 'rgba(255,255,255, 0.1)' } }}
                 key={song.id}
                 cursor='pointer'>
