@@ -44,5 +44,6 @@ module.exports = {
     'no-unused-vars': 'warn',
     'react/self-closing-comp': 'off',
     'react/require-default-props': 'off',
+    'jsx-a11y/aria-proptypes': 'off',
   },
 }

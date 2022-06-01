@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken'
 import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '../../lib/prisma'
 
-
 // signin and create jwt token function
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { email, password } = req.body
@@ -19,21 +18,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         time: Date.now(),
       },
       'test',
-      { expiresIn: '8h' }
+      { expiresIn: '24h' }
     )
 
     res.setHeader(
       'Set-Cookie',
       cookie.serialize('SPOOTIK_ACCESS_TOKEN', token, {
         httpOnly: true,
-        maxAge: 8 * 60 * 60,
+        maxAge: 24 * 60 * 60,
         path: '/',
         sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production',
       })
     )
     res.json(user)
-    
   } else {
     res.status(401)
     res.json({ error: 'Email or password is incorrect' })
