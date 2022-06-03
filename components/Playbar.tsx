@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { HiOutlineHeart, HiHeart } from 'react-icons/hi'
 import Player from './Player'
 
+
 const Playbar = () => {
   const [fav, setFav] = useState(false)
   const songs = useStoreState((state: any) => state.activeSongs)
@@ -19,7 +20,7 @@ const Playbar = () => {
     <Box height='100px' width='100vw' bg='blackAlpha.900' padding='10px'>
       <Flex align='center'>
         {activeSong ? (
-          <Box padding='10px' color='white' width='30%' display='flex' alignItems='center'>
+          <Box padding='10px' color='white' width='20%' display='flex' alignItems='center'>
             <Box mr='20px'>
               <Image src='/placeholder.jpg' width={56} height={56} />
             </Box>
@@ -33,7 +34,7 @@ const Playbar = () => {
             </Box>
             <Box>
               <IconButton
-                icon={fav ? <HiHeart fontSize='20px' color='#1DB954'/> : <HiOutlineHeart fontSize='20px' />}
+                icon={fav ? <HiHeart fontSize='20px' color='#1DB954' /> : <HiOutlineHeart fontSize='20px' />}
                 color='gray'
                 aria-label='like song'
                 variant='link'
@@ -43,7 +44,9 @@ const Playbar = () => {
           </Box>
         ) : null}
 
-        <Box width='40%'>{activeSong ? <Player songs={songs} activeSong={activeSong} /> : null}</Box>
+        <Box width='80%'>{activeSong ? <Player songs={songs} activeSong={activeSong} /> : null}</Box>
+
+     
       </Flex>
     </Box>
   )

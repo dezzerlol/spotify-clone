@@ -17,6 +17,10 @@ import {
   MdShuffle,
   MdSkipNext,
   MdSkipPrevious,
+  MdOutlineVolumeUp,
+  MdOutlineVolumeOff,
+  MdOutlineSpeakerGroup,
+  MdOutlineQueueMusic,
 } from 'react-icons/md'
 import { formatTime } from '../lib/formatter'
 
@@ -29,6 +33,8 @@ const Player = ({ songs, activeSong }) => {
   const [repeat, setRepeat] = useState(false)
   const [shuffle, setShuffle] = useState(false)
   const [duration, setDuration] = useState(0.0)
+  const [volume, setVolume] = useState(true)
+  const [volumeLevel, setVolumeLevel] = useState(0.2)
   const changeActiveSong = useStoreActions((state: any) => state.changeActiveSong)
   const repeatRef = useRef(repeat)
 
@@ -120,100 +126,174 @@ const Player = ({ songs, activeSong }) => {
     soundRef.current.seek(e[0])
   }
 
+  const onTurnOffVolume = () => {
+    setVolume(false)
+  }
+
+  const onTurnOnVolume = () => {
+    setVolume(true)
+  }
+
+  const onSeekVolume = (e) => {
+    setVolumeLevel(e[0])
+  }
+
   return (
-    <Box>
-      <Box>
-        <ReactHowler playing={playing} src={activeSong?.url} ref={soundRef} onLoad={onLoad} onEnd={onEnd} />
-      </Box>
-      <Center color='gray.600'>
-        <ButtonGroup>
-          <IconButton
-            outline='none'
-            icon={<MdShuffle />}
-            variant='link'
-            aria-label='shuffle'
-            fontSize='18px'
-            color={shuffle ? 'white' : 'gray.600'}
-            onClick={onShuffle}
+    <Box display='flex' justifyContent='space-between' width='100%'>
+      <Box width='70%'>
+        <Box>
+          <ReactHowler
+            playing={playing}
+            src={activeSong?.url}
+            ref={soundRef}
+            onLoad={onLoad}
+            onEnd={onEnd}
+            volume={volumeLevel}
           />
-          <IconButton
-            outline='none'
-            icon={<MdSkipPrevious />}
-            variant='link'
-            aria-label='previous'
-            fontSize='24px'
-            onClick={prevSong}
-          />
-          {playing ? (
+        </Box>
+        <Center color='gray.600'>
+          <ButtonGroup>
             <IconButton
               outline='none'
-              icon={<MdOutlinePauseCircleFilled />}
+              icon={<MdShuffle />}
               variant='link'
-              aria-label='pause'
-              fontSize='40px'
-              color='white'
-              onClick={() => setPlayState(false)}
+              aria-label='shuffle'
+              fontSize='18px'
+              color={shuffle ? 'white' : 'gray.600'}
+              onClick={onShuffle}
+            />
+            <IconButton
+              outline='none'
+              icon={<MdSkipPrevious />}
+              variant='link'
+              aria-label='previous'
+              fontSize='24px'
+              onClick={prevSong}
+            />
+            {playing ? (
+              <IconButton
+                outline='none'
+                icon={<MdOutlinePauseCircleFilled />}
+                variant='link'
+                aria-label='pause'
+                fontSize='40px'
+                color='white'
+                onClick={() => setPlayState(false)}
+              />
+            ) : (
+              <IconButton
+                outline='none'
+                icon={<MdOutlinePlayCircleFilled />}
+                variant='link'
+                aria-label='play'
+                fontSize='40px'
+                color='white'
+                onClick={() => setPlayState(true)}
+              />
+            )}
+
+            <IconButton
+              outline='none'
+              icon={<MdSkipNext />}
+              variant='link'
+              aria-label='next'
+              fontSize='24px'
+              onClick={nextSong}
+            />
+            <IconButton
+              outline='none'
+              icon={<MdOutlineRepeat />}
+              variant='link'
+              aria-label='repeat'
+              fontSize='18px'
+              color={repeat ? 'white' : 'gray.600'}
+              onClick={onRepeat}
+            />
+          </ButtonGroup>
+        </Center>
+
+        <Box color='gray.600'>
+          <Flex justify='center' align='center'>
+            <Box width='5%'>
+              <Text fontSize='small'>{formatTime(seek)}</Text>
+            </Box>
+
+            <Box width='50%'>
+              <RangeSlider
+                aria-label={['min', 'max']}
+                step={0.1}
+                min={0}
+                max={duration ? (duration.toFixed(2) as unknown as number) : 0}
+                onChange={onSeek}
+                onChangeStart={() => setIsSeek(true)}
+                onChangeEnd={() => setIsSeek(false)}
+                value={[seek]}
+                id='player-range'>
+                <RangeSliderTrack bg='gray.800'>
+                  <RangeSliderFilledTrack bg='gray.600' />
+                </RangeSliderTrack>
+                <RangeSliderThumb index={0} />
+              </RangeSlider>
+            </Box>
+
+            <Box width='5%' textAlign='right'>
+              <Text fontSize='small'>{formatTime(duration)}</Text>
+            </Box>
+          </Flex>
+        </Box>
+      </Box>
+
+      <Box display='flex' alignItems='center' width='20%'>
+        <ButtonGroup width='50%'>
+          <IconButton
+            outline='none'
+            variant='link'
+            fontSize='22px'
+            icon={<MdOutlineQueueMusic />}
+            aria-label='volume off'
+          />
+          <IconButton
+            outline='none'
+            variant='link'
+            fontSize='22px'
+            icon={<MdOutlineSpeakerGroup />}
+            aria-label='volume off'
+          />
+          {volume ? (
+            <IconButton
+              outline='none'
+              variant='link'
+              fontSize='22px'
+              icon={<MdOutlineVolumeUp />}
+              aria-label='volume off'
+              onClick={onTurnOffVolume}
             />
           ) : (
             <IconButton
               outline='none'
-              icon={<MdOutlinePlayCircleFilled />}
               variant='link'
-              aria-label='play'
-              fontSize='40px'
-              color='white'
-              onClick={() => setPlayState(true)}
+              fontSize='22px'
+              icon={<MdOutlineVolumeOff />}
+              aria-label='volume off'
+              onClick={onTurnOnVolume}
             />
           )}
-
-          <IconButton
-            outline='none'
-            icon={<MdSkipNext />}
-            variant='link'
-            aria-label='next'
-            fontSize='24px'
-            onClick={nextSong}
-          />
-          <IconButton
-            outline='none'
-            icon={<MdOutlineRepeat />}
-            variant='link'
-            aria-label='repeat'
-            fontSize='18px'
-            color={repeat ? 'white' : 'gray.600'}
-            onClick={onRepeat}
-          />
         </ButtonGroup>
-      </Center>
-
-      <Box color='gray.600'>
-        <Flex justify='center' align='center'>
-          <Box width='10%'>
-            <Text fontSize='small'>{formatTime(seek)}</Text>
-          </Box>
-
-          <Box width='80%'>
-            <RangeSlider
-              aria-label={['min', 'max']}
-              step={0.1}
-              min={0}
-              max={duration ? (duration.toFixed(2) as unknown as number) : 0}
-              onChange={onSeek}
-              onChangeStart={() => setIsSeek(true)}
-              onChangeEnd={() => setIsSeek(false)}
-              value={[seek]}
-              id='player-range'>
-              <RangeSliderTrack bg='gray.800'>
-                <RangeSliderFilledTrack bg='gray.600' />
-              </RangeSliderTrack>
-              <RangeSliderThumb index={0} />
-            </RangeSlider>
-          </Box>
-
-          <Box width='10%' textAlign='right'>
-            <Text fontSize='small'>{formatTime(duration)}</Text>
-          </Box>
-        </Flex>
+        <Box width='45%'>
+          <RangeSlider
+            aria-label={['min', 'max']}
+            step={0.05}
+            min={0}
+            max={1}
+            onChange={onSeekVolume}
+            value={[volumeLevel]}
+            id='volume-range'>
+            <RangeSliderTrack bg='gray.800'>
+              <RangeSliderFilledTrack bg='gray.600' />
+            </RangeSliderTrack>
+            <RangeSliderThumb index={0} />
+          </RangeSlider>
+        </Box>
       </Box>
     </Box>
   )
