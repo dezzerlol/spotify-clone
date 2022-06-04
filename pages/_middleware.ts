@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// BUG: redirect from playlist not working
+
 const signedIdPages = ['/', '/playlist/:id', '/library', '/home'] // array of pages that locked to not signed users
 
 // redirect to signin pages if cookie not found

@@ -16,6 +16,7 @@ interface ActiveSongType {
 export const store = createStore({
   activeSongs: [],
   activeSong: null as ActiveSongType,
+  user: {},
 
   changeActiveSongs: action((state: any, payload: any) => {
     state.activeSongs = payload
@@ -24,4 +25,8 @@ export const store = createStore({
   changeActiveSong: action((state: any, payload: ActiveSongType) => {
     state.activeSong = payload
   }),
+
+  setUser: action((state: any, payload: any) => {
+    state.user = payload
+  })
 })

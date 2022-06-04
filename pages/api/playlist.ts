@@ -1,7 +1,7 @@
 import { validateRoute } from '../../lib/auth'
 import prisma from '../../lib/prisma'
 
-// get playlists api
+// getiing playlists with validating route so another user cant get logged user playlists
 export default validateRoute(async (req, res, user) => {
   const playlists = await prisma.playlist.findMany({
     where: {

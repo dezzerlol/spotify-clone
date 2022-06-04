@@ -18,7 +18,7 @@ export const validateRoute = (handler) => {
         user = await prisma.user.findUnique({ where: { id } })
 
         if (!user) {
-          throw new Error('Not real user')
+          throw new Error('User not found')
         }
       } catch (error) {
         res.status(401)

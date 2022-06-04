@@ -24,6 +24,9 @@ import {
 } from 'react-icons/md'
 import { formatTime } from '../lib/formatter'
 
+// FIXME scrubbing sound when moving thumb on seekbar
+// FIXME volume not changing when clicking directly on value on volumebar
+
 const Player = ({ songs, activeSong }) => {
   const soundRef = useRef(null)
   const [playing, setPlaying] = useState(true)
@@ -52,7 +55,6 @@ const Player = ({ songs, activeSong }) => {
         cancelAnimationFrame(timerId)
       }
     }
-
     cancelAnimationFrame(timerId)
   }, [playing, isSeek])
 
@@ -123,19 +125,29 @@ const Player = ({ songs, activeSong }) => {
   // on seekbar change set seek to event value
   const onSeek = (e) => {
     setSeek(parseFloat(e[0]))
-    soundRef.current.seek(e[0])
+
+    if (isSeek === false) {
+      soundRef.current.seek(e[0])
+    }
   }
 
   const onTurnOffVolume = () => {
     setVolume(false)
+    soundRef.current.volume(0)
   }
 
   const onTurnOnVolume = () => {
     setVolume(true)
+    soundRef.current.volume(volumeLevel)
   }
 
   const onSeekVolume = (e) => {
     setVolumeLevel(e[0])
+    if (e[0] === 0) {
+      onTurnOffVolume()
+    } else {
+      onTurnOnVolume()
+    }
   }
 
   return (
@@ -228,6 +240,7 @@ const Player = ({ songs, activeSong }) => {
                 onChangeStart={() => setIsSeek(true)}
                 onChangeEnd={() => setIsSeek(false)}
                 value={[seek]}
+                focusThumbOnChange={false}
                 id='player-range'>
                 <RangeSliderTrack bg='gray.800'>
                   <RangeSliderFilledTrack bg='gray.600' />
@@ -282,11 +295,12 @@ const Player = ({ songs, activeSong }) => {
         <Box width='45%'>
           <RangeSlider
             aria-label={['min', 'max']}
-            step={0.05}
+            step={0.01}
             min={0}
             max={1}
             onChange={onSeekVolume}
             value={[volumeLevel]}
+            focusThumbOnChange={false}
             id='volume-range'>
             <RangeSliderTrack bg='gray.800'>
               <RangeSliderFilledTrack bg='gray.600' />

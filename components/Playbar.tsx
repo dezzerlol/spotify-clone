@@ -3,7 +3,7 @@ import { IconButton } from '@chakra-ui/react'
 import { useStoreState } from 'easy-peasy'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import { HiOutlineHeart, HiHeart } from 'react-icons/hi'
+import { HiHeart, HiOutlineHeart } from 'react-icons/hi'
 import Player from './Player'
 
 

@@ -3,8 +3,7 @@ import fetcher from './fetcher'
 
 interface useMeReturn {
   user: {
-    firstName: string
-    lastName: string
+    username: string
     playlistsCount: number
   }
   isLoading: boolean

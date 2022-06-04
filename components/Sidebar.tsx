@@ -2,11 +2,13 @@ import { Box, Divider, LinkBox, LinkOverlay, List, ListIcon, ListItem, Text } fr
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React from 'react'
 import { BsFillPlusSquareFill } from 'react-icons/bs'
 import { FiHome, FiSearch } from 'react-icons/fi'
 import { MdFavorite, MdLibraryMusic } from 'react-icons/md'
 import { usePlaylist } from '../lib/hooks'
+
+// TODO add func to create playlists
 
 const navMenu = [
   { name: 'Home', icon: FiHome, route: '/' },

@@ -47,5 +47,6 @@ module.exports = {
     'jsx-a11y/aria-proptypes': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
     eqeqeq: 'warn',
+    'react/no-children-prop': 'warn',
   },
 }
