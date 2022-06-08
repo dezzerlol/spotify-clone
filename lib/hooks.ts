@@ -1,3 +1,4 @@
+import { useStoreActions } from 'easy-peasy';
 import useSWR from 'swr'
 import fetcher from './fetcher'
 
@@ -29,7 +30,9 @@ export const useMe = (): useMeReturn => {
 
 // call api 'playlist'
 export const usePlaylist = () => {
+  const setSidebarPlaylists = useStoreActions((store: any) => store.setSidebarPlaylists)
   const { data, error } = useSWR('/playlist', fetcher)
+  setSidebarPlaylists(data)
 
   return {
     playlists: (data as any) || [],
@@ -37,3 +40,4 @@ export const usePlaylist = () => {
     isError: error,
   }
 }
+

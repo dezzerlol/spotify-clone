@@ -48,5 +48,6 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': 'off',
     eqeqeq: 'warn',
     'react/no-children-prop': 'warn',
+    'object-shorthand': 'warn',
   },
 }

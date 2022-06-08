@@ -20,7 +20,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
   } catch (error) {
-    console.log(error)
     res.status(401)
     res.json({ error: 'user already exists' })
     return

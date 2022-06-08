@@ -11,7 +11,7 @@ const Home = ({ artists }) => {
     <GradientLayout
       color='gray'
       subtitle='profile'
-      title={isLoading ? <Skeleton height='40px' width='400px' /> : `${'asdasd'}`}
+      title={isLoading ? <Skeleton height='40px' width='400px' /> : `${user.username}`}
       description={`${user?.playlistsCount} public playlists`}
       roundImage>
       <Box color='white' paddingX='40px'>

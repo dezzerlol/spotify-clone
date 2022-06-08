@@ -4,17 +4,26 @@ import {
   ButtonGroup,
   IconButton,
   Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
   Skeleton,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { useStoreState } from 'easy-peasy'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from 'react-icons/io'
 import { logout } from '../lib/mutations'
+import PlaylistModal from './PlaylistModal'
 
 interface Props {
   children: React.ReactNode
@@ -27,8 +36,11 @@ interface Props {
 }
 
 const GradientLayout = ({ children, color, image, subtitle, title, description, roundImage }: Props) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const router = useRouter()
   const user = useStoreState((state: any) => state.user)
+
   const onLogout = async () => {
     const data = await logout()
     router.push('/signin')
@@ -103,18 +115,38 @@ const GradientLayout = ({ children, color, image, subtitle, title, description, 
         </Flex>
         <Flex>
           <Box padding='20px'>
-            <Image boxSize='160px' boxShadow='2xl' src={image} borderRadius={roundImage ? '100%' : ''} />
+            <Image boxSize='180px' boxShadow='2xl' src={image} borderRadius={roundImage ? '100%' : ''} />
           </Box>
-          <Box paddingY='70px' lineHeight='40px' color='white'>
+          <Box paddingY='60px' lineHeight='40px' color='white'>
             <Text fontSize='x-small' fontWeight='bold' casing='uppercase'>
               {subtitle}
             </Text>
-            <Text fontSize='6xl'>{title}</Text>
+            <Button
+              fontSize='6xl'
+              color='white'
+              variant='link'
+              m='0'
+              p='0'
+              lineHeight='6xl'
+              onClick={onOpen}
+              sx={{ '&:hover': { color: 'white', textDecoration: 'none' } }}>
+              {title}
+            </Button>
             <Text fontSize='small'>{description}</Text>
           </Box>
         </Flex>
       </Flex>
       <Box paddingY='50px'>{children}</Box>
+      <PlaylistModal
+        onClose={onClose}
+        onOpen={onOpen}
+        isOpen={isOpen}
+        image={image}
+        title={title}
+        roundImage={roundImage}
+        subtitle={subtitle}
+        id={Number(router.query.id)}
+      />
     </Box>
   )
 }

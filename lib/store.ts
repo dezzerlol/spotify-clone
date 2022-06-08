@@ -17,6 +17,8 @@ export const store = createStore({
   activeSongs: [],
   activeSong: null as ActiveSongType,
   user: {},
+  sidebarPlaylists: [{}],
+  playlist: {},
 
   changeActiveSongs: action((state: any, payload: any) => {
     state.activeSongs = payload
@@ -28,5 +30,15 @@ export const store = createStore({
 
   setUser: action((state: any, payload: any) => {
     state.user = payload
-  })
+  }),
+
+  setSidebarPlaylists: action((state: any, payload: any) => {
+    state.sidebarPlaylists = payload
+  }),
+
+  setPlaylist: action((state: any, payload: any) => {
+    state.playlist = payload
+  }),
+
+  renamePlaylist: action((state: any, payload: any) => {}),
 })

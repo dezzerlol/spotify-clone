@@ -1,13 +1,22 @@
-import { Box, Flex, Text } from '@chakra-ui/layout'
-import { Button, Input } from '@chakra-ui/react'
+import { Box, Divider, Flex, Text } from '@chakra-ui/layout'
+import { Button, Checkbox, Input, Link } from '@chakra-ui/react'
 import { useStoreActions } from 'easy-peasy'
 import Image from 'next/image'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 import { auth } from '../lib/mutations'
 
-const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
+// FIXME on production build loading spinner on button stops while request is still going
+interface IForm {
+  mode: 'signin' | 'signup'
+}
+
+const AuthForm = ({ mode }: IForm) => {
   const router = useRouter()
+  const [username, setUsername] = useState('')
+  const [isError, setIsError] = useState(false)
+  const [error, setError] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -16,35 +25,168 @@ const AuthForm: FC<{ mode: 'signin' | 'signup' }> = ({ mode }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    const user = await auth(mode, { email, password })
-    setUser(user)
+    const data = await auth(mode, { email, password, username })
+    if (data.error) {
+      setIsError(true)
+      setError(data.error)
+    } else {
+      setIsError(false)
+      setUser(data)
+      router.push('/')
+    }
     setIsLoading(false)
-    router.push('/')
   }
 
   return (
-    <Box height='100vh' width='100vw' color='black'>
-      <Flex align='center' justify='center' height='100px' borderBottom='1px solid lightgray'>
-        <Image src='/Spotify_logo_black.svg' width='180' height='60' />
+    <Box color='black' height='100%'>
+      <Flex
+        align='center'
+        justify='center'
+        height='100px'
+        width='100%'
+        top='0'
+        borderBottom='1px solid lightgray'
+        position='static'>
+        <NextLink href='/signin' passHref>
+          <Image src='/Spotify_logo_black.svg' width='180' height='60' />
+        </NextLink>
       </Flex>
-
-      <Flex align='center' justify='center' height='calc(100vh - 100px)' direction='column'>
-        <Text fontWeight='bold' fontSize='14px'>To continue, log in to Spotify.</Text>
-        <Box padding='50px' borderRadius='6px'>
-          <form onSubmit={handleSubmit}>
-            <Input placeholder='Email' type='email' onChange={(e) => setEmail(e.target.value)} mb='1rem' />
-            <Input placeholder='Password' type='password' onChange={(e) => setPassword(e.target.value)} mb='1rem' />
-            <Button
-              type='submit'
-              isLoading={isLoading}
-              variant='solid'
-              bg='green.500'
-              sx={{ '&:hover': { bg: 'green.400' } }}>
-              {mode}
-            </Button>
-          </form>
+      {mode === 'signin' ? (
+        <Box
+          display='flex'
+          alignItems='center'
+          justifyContent='center'
+          top='100px'
+          position='relative'
+          flexDirection='column'
+          height='100%'>
+          {isError && (
+            <Box textAlign='center' marginTop='1rem'>
+              <Text color='red' fontSize='14px'>
+                There was error processing your request: {error}.
+              </Text>
+            </Box>
+          )}
+          <Text fontWeight='bold' fontSize='14px'>
+            To continue, log in to Spotify.
+          </Text>
+          <Box padding='50px'>
+            <form onSubmit={handleSubmit}>
+              <Box>
+                <Input
+                  placeholder='Email'
+                  type='email'
+                  onChange={(e) => setEmail(e.target.value)}
+                  mb='1rem'
+                  padding='25px'
+                />
+                <Input
+                  placeholder='Password'
+                  type='password'
+                  onChange={(e) => setPassword(e.target.value)}
+                  mb='1rem'
+                  padding='25px'
+                />
+              </Box>
+              <NextLink href='/signin' passHref>
+                <Link>Forgot your password?</Link>
+              </NextLink>
+              <Box display='flex' justifyContent='space-between' alignItems='center'>
+                <Checkbox defaultChecked colorScheme='green'>
+                  Remember me
+                </Checkbox>
+                <Button
+                  type='submit'
+                  isLoading={isLoading}
+                  variant='solid'
+                  bg='#1ED760'
+                  borderRadius='50px'
+                  float='right'
+                  width='120px'
+                  height='50px'
+                  sx={{ '&:hover': { bg: 'green.400' } }}>
+                  Sign in
+                </Button>
+              </Box>
+            </form>
+            <Box>
+              <Divider marginY='2rem' color='gray.500' />
+              <Text fontWeight='bold' fontSize='18px' textAlign='center' marginBottom='2rem'>
+                Don&apos;t have an account?
+              </Text>
+              <Button
+                textTransform='uppercase'
+                borderRadius='50px'
+                bg='white'
+                border='1px solid lightgray'
+                width='100%'
+                onClick={() => router.push('/signup')}>
+                sign up for spotify
+              </Button>
+            </Box>
+          </Box>
         </Box>
-      </Flex>
+      ) : (
+        <Box
+          display='flex'
+          alignItems='center'
+          justifyContent='center'
+          top='100px'
+          position='relative'
+          flexDirection='column'
+          height='100%'>
+          <Text fontWeight='bold' fontSize='18px'>
+            Signup and listen for free.
+          </Text>
+          <Box padding='50px'>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Input
+                placeholder='Username'
+                type='text'
+                onChange={(e) => setUsername(e.target.value)}
+                mb='1rem'
+                padding='25px'
+                width='414px'
+              />
+              <Input
+                placeholder='Email'
+                type='email'
+                onChange={(e) => setEmail(e.target.value)}
+                mb='1rem'
+                padding='25px'
+                width='414px'
+              />
+              <Input
+                placeholder='Password'
+                type='password'
+                onChange={(e) => setPassword(e.target.value)}
+                mb='1rem'
+                padding='25px'
+                width='414px'
+              />
+
+              <Button
+                type='submit'
+                isLoading={isLoading}
+                variant='solid'
+                bg='#1ED760'
+                borderRadius='50px'
+                width='120px'
+                height='50px'
+                sx={{ '&:hover': { bg: 'green.400' } }}>
+                Submit
+              </Button>
+            </form>
+            {isError && (
+              <Box textAlign='center' marginTop='1rem'>
+                <Text color='red' fontSize='14px'>
+                  There was error processing your request: {error}.
+                </Text>
+              </Box>
+            )}
+          </Box>
+        </Box>
+      )}
     </Box>
   )
 }
