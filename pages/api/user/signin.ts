@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import cookie from 'cookie'
 import jwt from 'jsonwebtoken'
 import { NextApiRequest, NextApiResponse } from 'next'
-import prisma from '../../lib/prisma'
+import prisma from '../../../lib/prisma'
 
 // signin and create jwt token function
 export default async (req: NextApiRequest, res: NextApiResponse) => {

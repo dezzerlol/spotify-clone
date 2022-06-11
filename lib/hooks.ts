@@ -1,4 +1,4 @@
-import { useStoreActions } from 'easy-peasy';
+import { useStoreActions } from 'easy-peasy'
 import useSWR from 'swr'
 import fetcher from './fetcher'
 
@@ -12,14 +12,14 @@ interface useMeReturn {
 }
 
 interface usePlaylistReturn {
-  playlists: Response | []
+  playlists: string[] | []
   isLoading: boolean
   isError: string
 }
 
 // call api 'me'
 export const useMe = (): useMeReturn => {
-  const { data, error } = useSWR('/me', fetcher)
+  const { data, error } = useSWR('/user/me', fetcher)
 
   return {
     user: data,
@@ -29,10 +29,9 @@ export const useMe = (): useMeReturn => {
 }
 
 // call api 'playlist'
-export const usePlaylist = () => {
-  const setSidebarPlaylists = useStoreActions((store: any) => store.setSidebarPlaylists)
-  const { data, error } = useSWR('/playlist', fetcher)
-  setSidebarPlaylists(data)
+export const usePlaylist = (): usePlaylistReturn => {
+  const { data, error } = useSWR('/playlists/playlist', fetcher)
+  useStoreActions((actions: any) => actions.setSidebarPlaylists(data))
 
   return {
     playlists: (data as any) || [],
@@ -40,4 +39,3 @@ export const usePlaylist = () => {
     isError: error,
   }
 }
-

@@ -1,5 +1,5 @@
-import { validateRoute } from '../../lib/auth'
-import prisma from '../../lib/prisma'
+import { validateRoute } from '../../../lib/auth'
+import prisma from '../../../lib/prisma'
 
 // creating playlist
 export default validateRoute(async (req, res, user) => {

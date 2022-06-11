@@ -6,7 +6,6 @@ import React, { useState } from 'react'
 import { HiHeart, HiOutlineHeart } from 'react-icons/hi'
 import Player from './Player'
 
-
 const Playbar = () => {
   const [fav, setFav] = useState(false)
   const songs = useStoreState((state: any) => state.activeSongs)
@@ -17,7 +16,7 @@ const Playbar = () => {
   }
 
   return (
-    <Box height='100px' width='100vw' bg='blackAlpha.900' padding='10px'>
+    <Box height='100px' width='100vw' bg='blackAlpha.900' padding='10px' onContextMenu={(e) => e.preventDefault()}>
       <Flex align='center'>
         {activeSong ? (
           <Box padding='10px' color='white' width='20%' display='flex' alignItems='center'>
@@ -45,8 +44,6 @@ const Playbar = () => {
         ) : null}
 
         <Box width='80%'>{activeSong ? <Player songs={songs} activeSong={activeSong} /> : null}</Box>
-
-     
       </Flex>
     </Box>
   )

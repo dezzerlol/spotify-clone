@@ -1,5 +1,5 @@
-import { validateRoute } from '../../lib/auth'
-import prisma from '../../lib/prisma'
+import { validateRoute } from '../../../lib/auth'
+import prisma from '../../../lib/prisma'
 
 // renaming playlist
 export default validateRoute(async (req, res, user) => {
@@ -10,7 +10,7 @@ export default validateRoute(async (req, res, user) => {
       data: { name: newName },
     })
   } catch (error) {
-    res.json({ error: error })
+    res.json({ error })
   }
   res.json({ message: 'successfully renamed playlist' })
 })

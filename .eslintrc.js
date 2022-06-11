@@ -20,7 +20,6 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'import/prefer-default-export': 'off',
     'no-param-reassign': 'off',
-
     'import/extensions': [
       'error',
       'ignorePackages',
@@ -49,5 +48,6 @@ module.exports = {
     eqeqeq: 'warn',
     'react/no-children-prop': 'warn',
     'object-shorthand': 'warn',
+    'react/jsx-key': 'error',
   },
 }

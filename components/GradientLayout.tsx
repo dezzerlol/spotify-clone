@@ -4,13 +4,6 @@ import {
   ButtonGroup,
   IconButton,
   Image,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -19,38 +12,44 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { useStoreState } from 'easy-peasy'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from 'react-icons/io'
 import { logout } from '../lib/mutations'
-import PlaylistModal from './PlaylistModal'
+import Modal from './Modal'
 
-interface Props {
+interface IProps {
   children: React.ReactNode
   color?: string
   image?: string
-  subtitle?: string
+  subtitle?: 'profile' | 'playlist'
   description?: string
   title?: string | React.ReactNode
   roundImage?: true | false
 }
 
-const GradientLayout = ({ children, color, image, subtitle, title, description, roundImage }: Props) => {
+const GradientLayout = ({ children, color, image, subtitle, title, description, roundImage }: IProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const [pageTitle, setPageTitle] = useState(title)
   const router = useRouter()
   const user = useStoreState((state: any) => state.user)
 
   const onLogout = async () => {
-    const data = await logout()
+    await logout()
     router.push('/signin')
   }
+
+  useEffect(() => {
+    setPageTitle(title)
+  }, [title])
 
   return (
     <Box
       height='100%'
       overflowY='auto'
-      bgGradient={`linear(${color}.500 1%, ${color}.600 10%, ${color}.700 30%, rgba(0,0,0, 0.95) 75%)`}>
+      bgGradient={`linear(${color}.500 1%, ${color}.600 10%, ${color}.700 30%, rgba(0,0,0, 0.95) 75%)`}
+      onContextMenu={(e) => e.preventDefault()}>
       <Flex bg={`${color}.600`} padding='30px 30px 0px 30px' align='start' direction='column'>
         <Flex paddingX='10px' justifyContent='space-between' width='100%'>
           <Box>
@@ -91,21 +90,62 @@ const GradientLayout = ({ children, color, image, subtitle, title, description, 
                 />
               </PopoverTrigger>
               <PopoverContent
-                bg='gray.900'
+                bgColor='#282828'
                 color='white'
                 boxShadow='0px 0px 5px 3px rgba(34, 60, 80, 0.6)'
                 border='0'
-                width='200px'>
+                width='220px'>
                 <PopoverBody p='1rem'>
-                  <Box mb='1rem'>Account</Box>
-                  <Box mb='1rem'>Profile</Box>
-                  <Box mb='1rem'>Upgrade to Premium</Box>
-                  <Box mb='1rem'>Private session</Box>
-                  <Box mb='1rem'>Settings</Box>
+                  <Box
+                    padding='8px 12px'
+                    sx={{ '&:hover': { backgroundColor: '#4b4b4b' } }}
+                    borderRadius='5px'
+                    cursor='pointer'>
+                    Account
+                  </Box>
+                  <Box
+                    padding='8px 12px'
+                    sx={{ '&:hover': { backgroundColor: '#4b4b4b' } }}
+                    borderRadius='5px'
+                    cursor='pointer'>
+                    <Link href={user ? `/user/${user.id}` : ''} passHref>
+                      Profile
+                    </Link>
+                  </Box>
+                  <Box
+                    padding='8px 12px'
+                    sx={{ '&:hover': { backgroundColor: '#4b4b4b' } }}
+                    borderRadius='5px'
+                    cursor='pointer'>
+                    Upgrade to Premium
+                  </Box>
+                  <Box
+                    padding='8px 12px'
+                    sx={{ '&:hover': { backgroundColor: '#4b4b4b' } }}
+                    borderRadius='5px'
+                    cursor='pointer'>
+                    Private session
+                  </Box>
+                  <Box
+                    padding='8px 12px'
+                    sx={{ '&:hover': { backgroundColor: '#4b4b4b' } }}
+                    borderRadius='5px'
+                    cursor='pointer'>
+                    Settings
+                  </Box>
                   <Divider />
-                  <Box marginTop='0.5rem'>
-                    <Button variant='link' onClick={onLogout}>
-                      Logout
+                  <Box
+                    padding='8px 12px'
+                    sx={{ '&:hover': { backgroundColor: '#4b4b4b' } }}
+                    borderRadius='5px'
+                    cursor='pointer'>
+                    <Button
+                      variant='link'
+                      onClick={onLogout}
+                      sx={{ '&:hover': { textDecoration: 'none' } }}
+                      color='white'
+                      fontWeight='400'>
+                      Log out
                     </Button>
                   </Box>
                 </PopoverBody>
@@ -113,39 +153,42 @@ const GradientLayout = ({ children, color, image, subtitle, title, description, 
             </Popover>
           </Box>
         </Flex>
-        <Flex>
-          <Box padding='20px'>
-            <Image boxSize='180px' boxShadow='2xl' src={image} borderRadius={roundImage ? '100%' : ''} />
-          </Box>
-          <Box paddingY='60px' lineHeight='40px' color='white'>
-            <Text fontSize='x-small' fontWeight='bold' casing='uppercase'>
-              {subtitle}
-            </Text>
-            <Button
-              fontSize='6xl'
-              color='white'
-              variant='link'
-              m='0'
-              p='0'
-              lineHeight='6xl'
-              onClick={onOpen}
-              sx={{ '&:hover': { color: 'white', textDecoration: 'none' } }}>
-              {title}
-            </Button>
-            <Text fontSize='small'>{description}</Text>
-          </Box>
-        </Flex>
+
+        {title && (
+          <Flex>
+            <Box padding='20px'>
+              <Image boxSize='180px' boxShadow='2xl' src={image} borderRadius={roundImage ? '100%' : ''} />
+            </Box>
+            <Box paddingY='60px' lineHeight='40px' color='white'>
+              <Text fontSize='x-small' fontWeight='bold' casing='uppercase'>
+                {subtitle}
+              </Text>
+              <Button
+                fontSize='6xl'
+                color='white'
+                variant='link'
+                m='0'
+                p='0'
+                lineHeight='6xl'
+                onClick={onOpen}
+                sx={{ '&:hover': { color: 'white', textDecoration: 'none' } }}>
+                {pageTitle}
+              </Button>
+              <Text fontSize='small'>{description}</Text>
+            </Box>
+          </Flex>
+        )}
       </Flex>
-      <Box paddingY='50px'>{children}</Box>
-      <PlaylistModal
+      <Box paddingY='20px'>{children}</Box>
+      <Modal
         onClose={onClose}
-        onOpen={onOpen}
         isOpen={isOpen}
         image={image}
-        title={title}
         roundImage={roundImage}
         subtitle={subtitle}
         id={Number(router.query.id)}
+        setPageTitle={setPageTitle}
+        pageTitle={pageTitle}
       />
     </Box>
   )

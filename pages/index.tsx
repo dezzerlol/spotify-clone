@@ -1,54 +1,40 @@
-import { Box, Flex, Text } from '@chakra-ui/layout'
+import { Box, Flex, SimpleGrid, Text } from '@chakra-ui/layout'
 import { Image, Skeleton } from '@chakra-ui/react'
 import GradientLayout from '../components/GradientLayout'
 import { useMe } from '../lib/hooks'
 import prisma from '../lib/prisma'
 
-const Home = ({ artists }) => {
+const Home = ({ songs, playlists }) => {
   const { user, isLoading } = useMe()
+  console.log(songs, playlists)
 
   return (
-    <GradientLayout
-      color='gray'
-      subtitle='profile'
-      title={isLoading ? <Skeleton height='40px' width='400px' /> : `${user.username}`}
-      description={`${user?.playlistsCount} public playlists`}
-      roundImage>
-      <Box color='white' paddingX='40px'>
-        <Box marginBottom='40px' marginLeft='10px'>
-          <Text fontSize='2xl' fontWeight='bold'>
-            Top artists this month
-          </Text>
-          <Text fontSize='small'>Only visible to you</Text>
-        </Box>
-
-        <Flex>
-          {artists.map((artist) => (
-            <Box paddingX='10px' width='15%'>
-              <Box bg='gray.900' borderRadius='4px' padding='15px' width='100%'>
-                <Image src='https://craftypixels.com/placeholder-image/300' borderRadius='100%' />
-                <Box marginTop='20px'>
-                  <Text fontSize='large' fontWeight='bold'>
-                    {artist.name}
-                  </Text>
-                  <Text fontSize='small' color='gray.500'>
-                    {artist.name}
-                  </Text>
-                </Box>
-              </Box>
-            </Box>
+    <GradientLayout color='gray'>
+      <Box color='white' paddingX='50px'>
+        <Text as='h3' fontSize='32px' fontWeight='600'>
+          Good evening
+        </Text>
+        <SimpleGrid minChildWidth='400px' spacing='20px' paddingY='20px'>
+          {playlists.slice(0, 6).map((playlist) => (
+            <Flex key={playlist.id} height='100px' bgColor='gray.900' borderRadius='5px' alignItems='center'>
+              <Image boxSize='100px' boxShadow='dark-sm' paddingRight='10px' />
+              <Text fontSize='16px' fontWeight='600'>
+                {playlist.name}
+              </Text>
+            </Flex>
           ))}
-        </Flex>
+        </SimpleGrid>
       </Box>
     </GradientLayout>
   )
 }
 
 export const getServerSideProps = async () => {
-  const artists = await prisma.artist.findMany({})
+  const songs = await prisma.song.findMany({})
+  const playlists = await prisma.playlist.findMany({})
 
   return {
-    props: { artists },
+    props: { songs, playlists },
   }
 }
 

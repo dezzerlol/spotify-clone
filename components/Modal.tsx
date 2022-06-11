@@ -14,10 +14,24 @@ import {
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { renamePlaylist } from '../lib/mutations'
+import { useSWRConfig } from 'swr'
+import { changeUsername, renamePlaylist } from '../lib/mutations'
 
-const PlaylistModal = ({ onClose, onOpen, isOpen, image, title, roundImage, subtitle, id }) => {
-  const [pageTitle, setPageTitle] = useState(title)
+interface IProps {
+  onClose: () => void
+  isOpen: boolean
+  image: string
+  roundImage: boolean
+  subtitle: 'profile' | 'playlist'
+  id: number
+  pageTitle?: any
+  setPageTitle: (arg: string) => void
+}
+
+const PlaylistModal = (props: IProps) => {
+  const { onClose, isOpen, image, roundImage, subtitle, id, pageTitle, setPageTitle } = props
+  const { mutate } = useSWRConfig()
+  const [inputTitle, setInputTitle] = useState(pageTitle)
   const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
     accept: {
       'image/jpeg': [],
@@ -26,11 +40,17 @@ const PlaylistModal = ({ onClose, onOpen, isOpen, image, title, roundImage, subt
   })
 
   useEffect(() => {
-    setPageTitle(title)
-  }, [title])
+    setInputTitle(pageTitle)
+  }, [pageTitle])
 
   const handleSave = async () => {
-    await renamePlaylist({ id, newName: pageTitle })
+    setPageTitle(inputTitle)
+    if (subtitle === 'playlist') {
+      await renamePlaylist({ id, newName: inputTitle })
+      mutate('/playlist')
+    } else if (subtitle === 'profile') {
+      await changeUsername({ newUsername: inputTitle })
+    }
   }
 
   return (
@@ -55,16 +75,16 @@ const PlaylistModal = ({ onClose, onOpen, isOpen, image, title, roundImage, subt
               borderRadius={roundImage ? '100%' : ''}
             />
           </Box>
-          <Box>
-            <Box>
-              <Input
-                border='0'
-                bgColor='gray.800'
-                mb='1rem'
-                placeholder='Set your playlist name'
-                defaultValue={title}
-                onChange={(e) => setPageTitle(e.target.value)}
-              />
+          <Box display='flex' alignItems='center' width='70%' flexDirection={subtitle === 'playlist' ? 'column' : null}>
+            <Input
+              border='0'
+              bgColor='gray.800'
+              mb='1rem'
+              placeholder='Set your playlist name'
+              defaultValue={inputTitle}
+              onChange={(e) => setInputTitle(e.target.value)}
+            />
+            {subtitle === 'playlist' ? (
               <Textarea
                 border='0'
                 bgColor='gray.800'
@@ -72,7 +92,7 @@ const PlaylistModal = ({ onClose, onOpen, isOpen, image, title, roundImage, subt
                 placeholder='Add an optional description'
                 height='120px'
               />
-            </Box>
+            ) : null}
           </Box>
         </ModalBody>
         <ModalFooter>
