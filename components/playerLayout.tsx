@@ -1,17 +1,19 @@
 import { Box } from '@chakra-ui/layout'
 import { useStoreActions } from 'easy-peasy'
 import React, { FC, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useMe } from '../lib/hooks'
+import { setUser } from '../store/Reducer'
 import Playbar from './Playbar'
 import Sidebar from './Sidebar'
 
 const PlayerLayout: FC = ({ children }) => {
   const { user } = useMe()
-  const setUser = useStoreActions((actions: any) => actions.setUser)
+  const dispatch = useDispatch()
+  // const setUser = useStoreActions((actions: any) => actions.setUser)
 
   useEffect(() => {
-    setUser(user)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(setUser(user))
   }, [user])
 
   return (

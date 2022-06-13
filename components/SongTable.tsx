@@ -1,5 +1,6 @@
 import { Box, Divider } from '@chakra-ui/layout'
 import {
+  Button,
   IconButton,
   Popover,
   PopoverBody,
@@ -14,27 +15,40 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { useStoreActions } from 'easy-peasy'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { AiOutlineClockCircle } from 'react-icons/ai'
 import { BsFillPlayFill } from 'react-icons/bs'
 import { HiHeart } from 'react-icons/hi'
+import { useDispatch } from 'react-redux'
 import { formatDate, formatTime } from '../lib/formatter'
-import { usePlaylist } from '../lib/hooks'
-import { addToPlaylist } from '../lib/mutations'
+import { usePlaylist, useStateWithDep } from '../lib/hooks'
+import { addToPlaylist, removeFromPlaylist } from '../lib/mutations'
+import { changeActiveSong, changeActiveSongs } from '../store/Reducer'
 import { ContextMenu } from './ContextMenu'
 
 const SongTable = ({ songs }) => {
   const { playlists } = usePlaylist()
-  const playSongs = useStoreActions((store: any) => store.changeActiveSongs)
-  const setActiveSong = useStoreActions((store: any) => store.changeActiveSong)
+  const router = useRouter()
+  const dispatch = useDispatch()
   const { isOpen, onToggle, onClose } = useDisclosure()
+  const [allSongs, setAllSongs] = useStateWithDep(songs)
   const [show, setShow] = useState(false)
   const [points, setPoints] = useState({ x: 0, y: 0 })
   const [clickedSong, setClickedSong] = useState(1)
 
   const handlePlay = (activeSong?) => {
-    setActiveSong(activeSong || songs[0])
-    playSongs(songs)
+    dispatch(changeActiveSong(activeSong || allSongs[0]))
+    dispatch(changeActiveSongs(allSongs))
+  }
+
+  const handleAdd = (playlistId: number, songId: number) => {
+    addToPlaylist({ playlistId, songId })
+  }
+
+  const handleRemove = async (playlistId: number, songId: number) => {
+    const data = await removeFromPlaylist({ playlistId, songId })
+    setAllSongs((state) => state.filter((song) => song.id !== songId))
   }
 
   useEffect(() => {
@@ -42,10 +56,6 @@ const SongTable = ({ songs }) => {
     window.addEventListener('click', handleClick)
     return () => window.removeEventListener('click', handleClick)
   }, [])
-
-  const handleAdd = (playlistId: number, songId: number) => {
-    addToPlaylist({ playlistId, songId })
-  }
 
   return (
     <Box bg='transparent' color='white'>
@@ -75,14 +85,14 @@ const SongTable = ({ songs }) => {
           </Thead>
 
           <Tbody>
-            {songs.map((song, index) => (
+            {allSongs.map((song, index) => (
               <Tr
                 onClick={() => handlePlay(song)}
                 onContextMenu={(e) => {
                   e.preventDefault()
                   setShow(true)
                   setClickedSong(song.id)
-                  if (index > songs.length / 4) {
+                  if (index > allSongs.length / 4) {
                     setPoints({ x: e.pageX, y: e.pageY - 300 })
                   } else {
                     setPoints({ x: e.pageX, y: e.pageY })
@@ -120,7 +130,17 @@ const SongTable = ({ songs }) => {
                 <li>Show credits</li>
                 <Divider color='gray.500' />
                 <li>Save to your Liked songs</li>
-                <li>Remove from this playlist</li>
+                <li>
+                  <Button
+                    onClick={() => handleRemove(Number(router.query.id), clickedSong)}
+                    variant='link'
+                    color='white'
+                    fontWeight='400'
+                    fontSize='14px'
+                    sx={{ '&:hover': { textDecoration: 'none' } }}>
+                    Remove from this playlist
+                  </Button>
+                </li>
                 <PopoverTrigger>
                   <li onMouseEnter={onToggle}>Add to playlist</li>
                 </PopoverTrigger>

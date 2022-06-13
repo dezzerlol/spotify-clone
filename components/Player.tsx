@@ -22,12 +22,15 @@ import {
   MdOutlineSpeakerGroup,
   MdOutlineQueueMusic,
 } from 'react-icons/md'
+import { useDispatch } from 'react-redux'
 import { formatTime } from '../lib/formatter'
+import { changeActiveSong } from '../store/Reducer'
 
 // FIXME scrubbing sound when moving thumb on seekbar
 // FIXME volume not changing when clicking directly on value on volumebar
 
 const Player = ({ songs, activeSong }) => {
+  const dispatch = useDispatch()
   const soundRef = useRef(null)
   const [playing, setPlaying] = useState(true)
   const [index, setIndex] = useState(songs.findIndex((s) => s.id === activeSong.id))
@@ -38,7 +41,6 @@ const Player = ({ songs, activeSong }) => {
   const [duration, setDuration] = useState(0.0)
   const [volume, setVolume] = useState(true)
   const [volumeLevel, setVolumeLevel] = useState(0.2)
-  const changeActiveSong = useStoreActions((state: any) => state.changeActiveSong)
   const repeatRef = useRef(repeat)
 
   // animating duration on seekbar
@@ -59,8 +61,8 @@ const Player = ({ songs, activeSong }) => {
   }, [playing, isSeek])
 
   useEffect(() => {
-    changeActiveSong(songs[index])
-  }, [index, changeActiveSong, songs])
+    dispatch(changeActiveSong(songs[index]))
+  }, [index, songs])
 
   // setting repeatref value to current repeat value
   useEffect(() => {

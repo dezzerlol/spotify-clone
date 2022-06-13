@@ -16,6 +16,8 @@ const run = async () => {
               name: song.name,
               duration: song.duration,
               url: song.url,
+              photo: artist.albumPhoto,
+              artistName: song.artist,
             })),
           },
         },
@@ -30,13 +32,13 @@ const run = async () => {
     create: {
       email: 'user@test.com',
       password: bcrypt.hashSync('password', salt),
-      username: 'dezzerlol'
+      username: 'dezzerlol',
     },
   })
 
   const songs = await prisma.song.findMany({})
   await Promise.all(
-    new Array(10).fill(1).map(async (_, i) => {
+    new Array(6).fill(1).map(async (_, i) => {
       return prisma.playlist.create({
         data: {
           name: `Playlist #${i + 1}`,

@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from 'react-icons/io'
+import { useSelector } from 'react-redux'
 import { logout } from '../lib/mutations'
 import Modal from './Modal'
 
@@ -33,7 +34,8 @@ const GradientLayout = ({ children, color, image, subtitle, title, description, 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [pageTitle, setPageTitle] = useState(title)
   const router = useRouter()
-  const user = useStoreState((state: any) => state.user)
+  // const user = useStoreState((state: any) => state.user)
+  const user = useSelector((state: any) => state.playlistReducer.user)
 
   const onLogout = async () => {
     await logout()

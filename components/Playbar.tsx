@@ -4,16 +4,21 @@ import { useStoreState } from 'easy-peasy'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { HiHeart, HiOutlineHeart } from 'react-icons/hi'
+import { useSelector } from 'react-redux'
 import Player from './Player'
 
 const Playbar = () => {
   const [fav, setFav] = useState(false)
-  const songs = useStoreState((state: any) => state.activeSongs)
-  const activeSong = useStoreState((state: any) => state.activeSong)
+  // const songs = useStoreState((state: any) => state.activeSongs)
+  // const activeSong = useStoreState((state: any) => state.activeSong)
+
+  const songs = useSelector((state: any) => state.playlistReducer.activeSongs)
+  const activeSong = useSelector((state: any) => state.playlistReducer.activeSong)
 
   const setFavorite = () => {
     setFav((state) => !state)
   }
+
 
   return (
     <Box height='100px' width='100vw' bg='blackAlpha.900' padding='10px' onContextMenu={(e) => e.preventDefault()}>

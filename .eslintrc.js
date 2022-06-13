@@ -49,5 +49,7 @@ module.exports = {
     'react/no-children-prop': 'warn',
     'object-shorthand': 'warn',
     'react/jsx-key': 'error',
+    'default-param-last': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
   },
 }

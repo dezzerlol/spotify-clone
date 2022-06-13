@@ -47,7 +47,7 @@ const PlaylistModal = (props: IProps) => {
     setPageTitle(inputTitle)
     if (subtitle === 'playlist') {
       await renamePlaylist({ id, newName: inputTitle })
-      mutate('/playlist')
+      mutate('/playlists/playlist')
     } else if (subtitle === 'profile') {
       await changeUsername({ newUsername: inputTitle })
     }

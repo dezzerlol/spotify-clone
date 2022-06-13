@@ -5,7 +5,9 @@ import Image from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { auth } from '../lib/mutations'
+import { setUser } from '../store/Reducer'
 
 // FIXME on production build loading spinner on button stops while request is still going
 interface IForm {
@@ -13,6 +15,7 @@ interface IForm {
 }
 
 const AuthForm = ({ mode }: IForm) => {
+  const dispatch = useDispatch()
   const router = useRouter()
   const [username, setUsername] = useState('')
   const [isError, setIsError] = useState(false)
@@ -20,7 +23,7 @@ const AuthForm = ({ mode }: IForm) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const setUser = useStoreActions((store: any) => store.setUser)
+  // const setUser = useStoreActions((store: any) => store.setUser)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -31,7 +34,7 @@ const AuthForm = ({ mode }: IForm) => {
       setError(data.error)
     } else {
       setIsError(false)
-      setUser(data)
+      dispatch(setUser(data))
       router.push('/')
     }
     setIsLoading(false)

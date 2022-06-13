@@ -23,5 +23,9 @@ export const changeUsername = (body: { newUsername: string }) => {
 }
 
 export const addToPlaylist = (body: { playlistId: number; songId: number }) => {
-  return fetcher('/playlists/addToPlaylist', body)
+  return fetcher('/playlists/addSong', body)
+}
+
+export const removeFromPlaylist = (body: { playlistId: number; songId: number }) => {
+  return fetcher('/playlists/removeSong', body)
 }

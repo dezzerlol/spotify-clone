@@ -39,6 +39,4 @@ export const store = createStore({
   setPlaylist: action((state: any, payload: any) => {
     state.playlist = payload
   }),
-
-  renamePlaylist: action((state: any, payload: any) => {}),
 })
