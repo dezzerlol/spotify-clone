@@ -44,14 +44,14 @@ const playlistReducer = (state = initialState, action) => {
     case 'SET_SIDEBAR_PLAYLISTS': {
       return {
         ...state,
-        user: action.payload,
+        sidebarPlaylists: action.payload,
       }
     }
 
     case 'SET_PLAYLIST': {
       return {
         ...state,
-        user: action.payload,
+        playlist: action.payload,
       }
     }
 

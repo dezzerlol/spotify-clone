@@ -22,5 +22,5 @@ export default validateRoute(async (req, res, user) => {
   })
 
   res.status(200)
-  res.json({ newPlaylist, playlists: playlists })
+  res.json({ newPlaylist, playlists })
 })

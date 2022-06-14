@@ -51,5 +51,8 @@ module.exports = {
     'react/jsx-key': 'error',
     'default-param-last': 'off',
     'react-hooks/exhaustive-deps': 'warn',
+    'no-unneeded-ternary': 'off',
+    'no-underscore-dangle': 'off',
+    'no-nested-ternary': 'off',
   },
 }

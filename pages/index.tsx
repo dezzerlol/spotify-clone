@@ -1,11 +1,12 @@
 import { Box, Flex, SimpleGrid, Text } from '@chakra-ui/layout'
 import { Image } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import GradientLayout from '../components/GradientLayout'
-import { useMe } from '../lib/hooks'
 import prisma from '../lib/prisma'
 
 const Home = ({ songs, playlists, artists }) => {
-  const { user, isLoading } = useMe()
+  const router = useRouter()
+  const random = playlists.concat(artists)
 
   return (
     <GradientLayout color='gray'>
@@ -14,21 +15,30 @@ const Home = ({ songs, playlists, artists }) => {
           Good evening
         </Text>
         <SimpleGrid minChildWidth='400px' spacing='20px' paddingY='20px'>
-          {playlists && playlists.slice(0, 6).map((playlist) => (
-            <Flex
-              key={playlist.id}
-              height='100px'
-              bgColor='#181818'
-              borderRadius='5px'
-              alignItems='center'
-              cursor='pointer'
-              sx={{ '&:hover': { bgColor: 'gray.900' } }}>
-              <Image boxSize='100px' boxShadow='dark-sm' paddingRight='10px' />
-              <Text fontSize='16px' fontWeight='600'>
-                {playlist.name}
-              </Text>
-            </Flex>
-          ))}
+          {playlists &&
+            playlists.slice(0, 6).map((playlist) => (
+              <Flex
+                key={playlist.id}
+                height='100px'
+                bgColor='#181818'
+                borderRadius='5px'
+                alignItems='center'
+                cursor='pointer'
+                onClick={() => router.push(`/playlist/${playlist.id}`)}
+                sx={{ '&:hover': { bgColor: 'gray.900' } }}>
+                <Image
+                  objectFit='cover'
+                  width={100}
+                  height={100}
+                  src={playlist.photo ? playlist.photo : '/defaultPlaylist.jpg'}
+                  boxShadow='10px 5px 5px -5px rgba(0, 0, 0, 0.4)'
+                  borderRadius='2px'
+                />
+                <Text paddingLeft='10px' fontSize='16px' fontWeight='600'>
+                  {playlist.name}
+                </Text>
+              </Flex>
+            ))}
         </SimpleGrid>
 
         <Box paddingY='20px'>
@@ -49,35 +59,36 @@ const Home = ({ songs, playlists, artists }) => {
             </Box>
           </Flex>
           <SimpleGrid minChildWidth='200px' spacing='90px' paddingY='20px'>
-            {artists && artists.map((artist) => (
-              <Flex
-                key={artist.id}
-                bgColor='#181818'
-                direction='column'
-                height='250px'
-                borderRadius='5px'
-                width='200px'
-                cursor='pointer'
-                sx={{ '&:hover': { bgColor: 'gray.900' } }}>
-                <Image
-                  boxSize='140px'
-                  borderRadius='50%'
-                  marginLeft='auto'
-                  marginRight='auto'
-                  marginTop='20px'
-                  boxShadow='4px 4px 80px 5px rgba(0, 0, 0, 0.8)'
-                  src='https://i.scdn.co/image/ab6761610000e5eb867008a971fae0f4d913f63a'
-                />
-                <Box padding='20px 0px 0px 20px'>
-                  <Text fontWeight='600' fontSize='18px'>
-                    {artist.name}
-                  </Text>
-                  <Text fontSize='14px' color='gray.400'>
-                    Artist
-                  </Text>
-                </Box>
-              </Flex>
-            ))}
+            {artists &&
+              artists.slice(0, 5).map((artist) => (
+                <Flex
+                  key={artist.id}
+                  bgColor='#181818'
+                  direction='column'
+                  height='250px'
+                  borderRadius='5px'
+                  width='200px'
+                  cursor='pointer'
+                  sx={{ '&:hover': { bgColor: 'gray.900' } }}>
+                  <Image
+                    boxSize='140px'
+                    borderRadius='50%'
+                    marginLeft='auto'
+                    marginRight='auto'
+                    marginTop='20px'
+                    boxShadow='4px 4px 80px 5px rgba(0, 0, 0, 0.8)'
+                    src={artist.avatar ? artist.avatar : '/defaultPlaylist.jpg'}
+                  />
+                  <Box padding='20px 0px 0px 20px'>
+                    <Text fontWeight='600' fontSize='18px'>
+                      {artist.name}
+                    </Text>
+                    <Text fontSize='14px' color='gray.400'>
+                      Artist
+                    </Text>
+                  </Box>
+                </Flex>
+              ))}
           </SimpleGrid>
         </Box>
 
@@ -85,10 +96,7 @@ const Home = ({ songs, playlists, artists }) => {
           <Flex alignItems='center' justifyContent='space-between'>
             <Box>
               <Text as='h3' fontSize='26px' fontWeight='600'>
-                Suggested artists
-              </Text>
-              <Text fontSize='sm' color='gray.300'>
-                Inspired by your recent activity.
+                Recently played
               </Text>
             </Box>
             <Box
@@ -99,35 +107,37 @@ const Home = ({ songs, playlists, artists }) => {
             </Box>
           </Flex>
           <SimpleGrid minChildWidth='200px' spacing='90px' paddingY='20px'>
-            {artists && artists.map((artist) => (
-              <Flex
-                key={artist.id}
-                bgColor='#181818'
-                direction='column'
-                height='250px'
-                borderRadius='5px'
-                width='200px'
-                cursor='pointer'
-                sx={{ '&:hover': { bgColor: 'gray.900' } }}>
-                <Image
-                  boxSize='140px'
-                  borderRadius='50%'
-                  marginLeft='auto'
-                  marginRight='auto'
-                  marginTop='20px'
-                  boxShadow='4px 4px 80px 5px rgba(0, 0, 0, 0.8)'
-                  src='https://i.scdn.co/image/ab6761610000e5eb867008a971fae0f4d913f63a'
-                />
-                <Box padding='20px 0px 0px 20px'>
-                  <Text fontWeight='600' fontSize='18px'>
-                    {artist.name}
-                  </Text>
-                  <Text fontSize='14px' color='gray.400'>
-                    Artist
-                  </Text>
-                </Box>
-              </Flex>
-            ))}
+            {artists &&
+              random.slice(0, 10).map((item) => (
+                <Flex
+                  key={item.id}
+                  bgColor='#181818'
+                  direction='column'
+                  height='250px'
+                  borderRadius='5px'
+                  width='200px'
+                  cursor='pointer'
+                  sx={{ '&:hover': { bgColor: 'gray.900' } }}>
+                  <Image
+                    boxSize='140px'
+                    borderRadius={item.userId ? '' : '50%'}
+                    objectFit='cover'
+                    marginLeft='auto'
+                    marginRight='auto'
+                    marginTop='20px'
+                    boxShadow='4px 4px 80px 5px rgba(0, 0, 0, 0.8)'
+                    src={item.photo ? item.photo : item.avatar ? item.avatar : '/defaultPlaylist.jpg'}
+                  />
+                  <Box padding='20px 0px 0px 20px'>
+                    <Text fontWeight='600' fontSize='18px'>
+                      {item.name}
+                    </Text>
+                    <Text fontSize='14px' color='gray.400'>
+                      {item.userId ? 'Playlist' : 'Artist'}
+                    </Text>
+                  </Box>
+                </Flex>
+              ))}
           </SimpleGrid>
         </Box>
       </Box>

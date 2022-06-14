@@ -6,7 +6,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     'Set-Cookie',
     cookie.serialize('SPOOTIK_ACCESS_TOKEN', 'false', {
       httpOnly: true,
-      maxAge: 1,
+      maxAge: 0,
       path: '/',
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',

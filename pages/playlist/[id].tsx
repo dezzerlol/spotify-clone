@@ -15,6 +15,7 @@ const Playlist = ({ playlist }) => {
     <GradientLayout
       color={getGBColor(playlist.id)}
       title={playlist.name}
+      image={playlist.photo}
       subtitle='playlist'
       description={`${playlist.songs.length} songs`}>
       <SongTable songs={playlist.songs} />

@@ -7,7 +7,6 @@ import {
   RangeSliderThumb,
   RangeSliderTrack,
 } from '@chakra-ui/react'
-import { useStoreActions } from 'easy-peasy'
 import React, { useEffect, useRef, useState } from 'react'
 import ReactHowler from 'react-howler'
 import {

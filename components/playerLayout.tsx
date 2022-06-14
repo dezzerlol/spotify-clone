@@ -1,19 +1,19 @@
 import { Box } from '@chakra-ui/layout'
-import { useStoreActions } from 'easy-peasy'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useMe } from '../lib/hooks'
 import { setUser } from '../store/Reducer'
 import Playbar from './Playbar'
 import Sidebar from './Sidebar'
 
-const PlayerLayout: FC = ({ children }) => {
-  const { user } = useMe()
+const PlayerLayout = ({ children }) => {
+  const { user, isLoading } = useMe()
   const dispatch = useDispatch()
-  // const setUser = useStoreActions((actions: any) => actions.setUser)
 
   useEffect(() => {
-    dispatch(setUser(user))
+    if (!isLoading) {
+      dispatch(setUser(user))
+    }
   }, [user])
 
   return (

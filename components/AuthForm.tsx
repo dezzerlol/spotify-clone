@@ -1,6 +1,5 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/layout'
 import { Button, Checkbox, Input, Link } from '@chakra-ui/react'
-import { useStoreActions } from 'easy-peasy'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -23,7 +22,6 @@ const AuthForm = ({ mode }: IForm) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  // const setUser = useStoreActions((store: any) => store.setUser)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -32,12 +30,13 @@ const AuthForm = ({ mode }: IForm) => {
     if (data.error) {
       setIsError(true)
       setError(data.error)
+      setIsLoading(false)
     } else {
       setIsError(false)
       dispatch(setUser(data))
       router.push('/')
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   return (
@@ -95,9 +94,7 @@ const AuthForm = ({ mode }: IForm) => {
                 <Link>Forgot your password?</Link>
               </NextLink>
               <Box display='flex' justifyContent='space-between' alignItems='center'>
-                <Checkbox defaultChecked colorScheme='green'>
-                  Remember me
-                </Checkbox>
+                <Checkbox colorScheme='green'>Remember me</Checkbox>
                 <Button
                   type='submit'
                   isLoading={isLoading}

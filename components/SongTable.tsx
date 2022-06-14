@@ -1,4 +1,4 @@
-import { Box, Divider } from '@chakra-ui/layout'
+import { Box, Divider, Flex, Text } from '@chakra-ui/layout'
 import {
   Button,
   IconButton,
@@ -14,11 +14,11 @@ import {
   Tr,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useStoreActions } from 'easy-peasy'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { AiOutlineClockCircle } from 'react-icons/ai'
-import { BsFillPlayFill } from 'react-icons/bs'
+import { BsFillPlayFill, BsPlayFill } from 'react-icons/bs'
 import { HiHeart } from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
 import { formatDate, formatTime } from '../lib/formatter'
@@ -36,6 +36,7 @@ const SongTable = ({ songs }) => {
   const [show, setShow] = useState(false)
   const [points, setPoints] = useState({ x: 0, y: 0 })
   const [clickedSong, setClickedSong] = useState(1)
+  const [isHover, setIsHover] = useState(-1)
 
   const handlePlay = (activeSong?) => {
     dispatch(changeActiveSong(activeSong || allSongs[0]))
@@ -74,7 +75,7 @@ const SongTable = ({ songs }) => {
         </Box>
         <Table variant='unstyled'>
           <Thead borderBottom='1px solid' borderColor='rgba(255,255,255, 0.2)'>
-            <Tr>
+            <Tr color='gray.400'>
               <Th>#</Th>
               <Th>Title</Th>
               <Th>Date added</Th>
@@ -98,17 +99,34 @@ const SongTable = ({ songs }) => {
                     setPoints({ x: e.pageX, y: e.pageY })
                   }
                 }}
+                onMouseEnter={() => setIsHover(index)}
+                onMouseLeave={() => setIsHover(-1)}
                 sx={{ transition: 'all 0.3s', '&:hover': { bg: 'rgba(255,255,255, 0.1)' } }}
                 key={song.id}
                 cursor='pointer'>
-                <Td>{index + 1}</Td>
-                <Td>{song.name}</Td>
-                <Td>{formatDate(song.createdAt)}</Td>
-                <Td>{formatTime(song.duration)}</Td>
+                <Td color='gray.400' width='30px'>
+                  {isHover === index ? <BsPlayFill fontSize='24px' /> : <Box width='30px'>{index + 1}</Box>}
+                </Td>
+                <Td>
+                  <Flex direction='row' align='center'>
+                    <Box paddingRight='20px'>
+                      <Image src={song.photo ? song.photo : '/defaultPlaylist.jpg'} width={35} height={35} />
+                    </Box>
+                    <Box>
+                      <Text>{song.name}</Text>
+                      <Text fontSize='xs' color='gray.400'>
+                        {song.artist.name}
+                      </Text>
+                    </Box>
+                  </Flex>
+                </Td>
+                <Td color='gray.400'>{formatDate(song.createdAt)}</Td>
+                <Td color='gray.400'> {formatTime(song.duration)}</Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
+        
         {show && (
           <Popover
             autoFocus={false}

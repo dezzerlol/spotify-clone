@@ -31,8 +31,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         secure: process.env.NODE_ENV === 'production',
       })
     )
-    // const {password, ...noPasswordUser} = user
-    res.json(user)
+    const { password, ...noPasswordUser } = user
+    
+    res.json(noPasswordUser)
   } else {
     res.status(401)
     res.json({ error: 'Email or password is incorrect' })

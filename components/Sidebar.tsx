@@ -8,8 +8,8 @@ import { BsFillPlusSquareFill } from 'react-icons/bs'
 import { FiHome, FiSearch } from 'react-icons/fi'
 import { MdFavorite, MdLibraryMusic } from 'react-icons/md'
 import { useSWRConfig } from 'swr'
-import { usePlaylist } from '../lib/hooks'
-import { createNewPlaylist } from '../lib/mutations'
+import { usePlaylist, useStateWithDep } from '../lib/hooks'
+import { createNewPlaylist, removePlaylist } from '../lib/mutations'
 import { ContextMenu } from './ContextMenu'
 
 const navMenu = [
@@ -21,21 +21,23 @@ const navMenu = [
 const Sidebar = () => {
   const { playlists } = usePlaylist()
   const { mutate } = useSWRConfig()
-  const [allPlaylists, setAllPlaylists] = useState(playlists)
   const [show, setShow] = useState(false)
+  const [clickedPlaylist, setClickedPlaylist] = useState()
   const [points, setPoints] = useState({ x: 0, y: 0 })
   const router = useRouter()
 
   const createPlaylist = async () => {
     const data = await createNewPlaylist()
-    setAllPlaylists(data.playlists)
     router.push(`/playlist/${data.newPlaylist.id}`)
+    mutate('/playlists/playlist')
   }
 
-  useEffect(() => {
-    setAllPlaylists(playlists)
-  }, [playlists])
+  const deletePlaylist = async (playlistId) => {
+    const data = await removePlaylist({ playlistId })
+    mutate('/playlists/playlist')
+  }
 
+  // closing context menu on outside click
   useEffect(() => {
     const handleClick = () => setShow(false)
     window.addEventListener('click', handleClick)
@@ -105,44 +107,140 @@ const Sidebar = () => {
 
         <Box height='66%' overflowY='auto' paddingX='20px' sx={{ '::-webkit-scrollbar': { display: 'none' } }}>
           <List>
-            {allPlaylists.map((playlist, index) => (
-              <ListItem key={playlist.id} lineHeight='32px' color={router.query.id == playlist.id ? 'white' : 'gray'}>
-                <LinkBox
-                  fontSize='14px'
-                  sx={{ '&:hover': { color: 'white' } }}
-                  onContextMenu={(e) => {
-                    e.preventDefault()
-                    setShow(true)
-                    if (index > 6) {
-                      setPoints({ x: e.pageX, y: e.pageY - 300 })
-                    } else {
-                      setPoints({ x: e.pageX, y: e.pageY })
-                    }
-                  }}>
-                  <Link href={{ pathname: `/playlist/[id]`, query: { id: playlist.id } }} passHref>
-                    <a>{playlist.name}</a>
-                  </Link>
-                </LinkBox>
-              </ListItem>
-            ))}
+            {playlists
+              ? playlists.map((playlist, index) => (
+                  <ListItem
+                    key={playlist.id}
+                    lineHeight='32px'
+                    color={router.query.id == playlist.id ? 'white' : 'gray'}>
+                    <LinkBox
+                      fontSize='14px'
+                      sx={{ '&:hover': { color: 'white' } }}
+                      onContextMenu={(e) => {
+                        e.preventDefault()
+                        setShow(true)
+                        setClickedPlaylist(playlist.id)
+                        if (index > 6) {
+                          setPoints({ x: e.pageX, y: e.pageY - 300 })
+                        } else {
+                          setPoints({ x: e.pageX, y: e.pageY })
+                        }
+                      }}>
+                      <Link href={{ pathname: `/playlist/[id]`, query: { id: playlist.id } }}>
+                        <a>{playlist.name}</a>
+                      </Link>
+                    </LinkBox>
+                  </ListItem>
+                ))
+              : ''}
           </List>
         </Box>
         {show && (
           <ContextMenu top={points.y} left={points.x}>
             <ul>
-              <li>Add to queue</li>
-              <li>Go to playlist radio</li>
+              <li>
+                <Button
+                  variant='link'
+                  color='white'
+                  fontWeight='400'
+                  fontSize='14px'
+                  disabled
+                  sx={{ '&:hover': { textDecoration: 'none' } }}>
+                  Add to queue
+                </Button>
+              </li>
+              <li>
+                <Button
+                  variant='link'
+                  color='white'
+                  fontWeight='400'
+                  fontSize='14px'
+                  disabled
+                  sx={{ '&:hover': { textDecoration: 'none' } }}>
+                  Go to playlist radio
+                </Button>
+              </li>
               <Divider color='gray.500' />
-              <li>Add to profile</li>
+              <li>
+                <Button
+                  variant='link'
+                  color='white'
+                  fontWeight='400'
+                  fontSize='14px'
+                  disabled
+                  sx={{ '&:hover': { textDecoration: 'none' } }}>
+                  Add to profile
+                </Button>
+              </li>
               <Divider color='gray.500' />
-              <li>Report</li>
-              <li>Remove from your library</li>
+              <li>
+                <Button
+                  variant='link'
+                  color='white'
+                  fontWeight='400'
+                  fontSize='14px'
+                  disabled
+                  sx={{ '&:hover': { textDecoration: 'none' } }}>
+                  Report
+                </Button>
+              </li>
+              <li>
+                <Button
+                  onClick={() => deletePlaylist(clickedPlaylist)}
+                  variant='link'
+                  color='white'
+                  fontWeight='400'
+                  fontSize='14px'
+                  sx={{ '&:hover': { textDecoration: 'none' } }}>
+                  Remove from Your library
+                </Button>
+              </li>
               <Divider color='gray.500' />
-              <li>Download</li>
-              <li>Create playlist</li>
-              <li>Create folder</li>
+              <li>
+                <Button
+                  variant='link'
+                  color='white'
+                  fontWeight='400'
+                  fontSize='14px'
+                  disabled
+                  sx={{ '&:hover': { textDecoration: 'none' } }}>
+                  Download
+                </Button>
+              </li>
+              <li>
+                <Button
+                  variant='link'
+                  color='white'
+                  fontWeight='400'
+                  fontSize='14px'
+                  onClick={createPlaylist}
+                  sx={{ '&:hover': { textDecoration: 'none' } }}>
+                  Create playlist
+                </Button>
+              </li>
+              <li>
+                <Button
+                  variant='link'
+                  color='white'
+                  fontWeight='400'
+                  fontSize='14px'
+                  disabled
+                  sx={{ '&:hover': { textDecoration: 'none' } }}>
+                  Create folder
+                </Button>
+              </li>
               <Divider color='gray.500' />
-              <li>Share</li>
+              <li>
+                <Button
+                  variant='link'
+                  color='white'
+                  fontWeight='400'
+                  fontSize='14px'
+                  disabled
+                  sx={{ '&:hover': { textDecoration: 'none' } }}>
+                  Share
+                </Button>
+              </li>
             </ul>
           </ContextMenu>
         )}

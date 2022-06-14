@@ -14,6 +14,10 @@ export const createNewPlaylist = () => {
   return fetcher('/playlists/createPlaylist')
 }
 
+export const removePlaylist = (body: { playlistId: number }) => {
+  return fetcher('/playlists/removePlaylist', body)
+}
+
 export const renamePlaylist = (body: { id: number; newName: string }) => {
   return fetcher('/playlists/renamePlaylist', body)
 }
@@ -26,6 +30,7 @@ export const addToPlaylist = (body: { playlistId: number; songId: number }) => {
   return fetcher('/playlists/addSong', body)
 }
 
+// del song from playlist
 export const removeFromPlaylist = (body: { playlistId: number; songId: number }) => {
   return fetcher('/playlists/removeSong', body)
 }
