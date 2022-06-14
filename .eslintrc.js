@@ -54,5 +54,6 @@ module.exports = {
     'no-unneeded-ternary': 'off',
     'no-underscore-dangle': 'off',
     'no-nested-ternary': 'off',
+    'no-shadow': 'warn',
   },
 }
