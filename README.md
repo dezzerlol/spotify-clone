@@ -1,3 +1,4 @@
+![Vercel](http://therealsujitk-vercel-badge.vercel.app/?app=spotify-clone)
 # Spotify-clone
 Spotify clone made for educational purposes.
 
