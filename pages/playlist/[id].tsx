@@ -1,5 +1,7 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import GradientLayout from '../../components/GradientLayout'
+import SEO from '../../components/SEO'
 import SongTable from '../../components/SongTable'
 import { validateToken } from '../../lib/auth'
 import prisma from '../../lib/prisma'
@@ -11,15 +13,24 @@ const getGBColor = (id) => {
 }
 
 const Playlist = ({ playlist }) => {
+  const activeSong = useSelector((state: any) => state.playlistReducer.activeSong)
   return (
-    <GradientLayout
-      color={getGBColor(playlist.id)}
-      title={playlist.name}
-      image={playlist.photo}
-      subtitle='playlist'
-      description={`${playlist.songs.length} songs`}>
-      <SongTable songs={playlist.songs} />
-    </GradientLayout>
+    <>
+      <SEO
+        title={activeSong ? `${activeSong.artist.name} — ${activeSong.name}` : `Spotify — ${playlist.name}`}
+        ogtitle={playlist.name}
+        description={`Listen on Spotify: ${playlist.name}`}
+        image={playlist.photo}
+      />
+      <GradientLayout
+        color={getGBColor(playlist.id)}
+        title={playlist.name}
+        image={playlist.photo}
+        subtitle='playlist'
+        description={`${playlist.songs.length} songs`}>
+        <SongTable songs={playlist.songs} />
+      </GradientLayout>
+    </>
   )
 }
 

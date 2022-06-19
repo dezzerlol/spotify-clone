@@ -1,8 +1,14 @@
 import React from 'react'
 import AuthForm from '../components/AuthForm'
+import SEO from '../components/SEO'
 
 const Signin = () => {
-  return <AuthForm mode='signin' />
+  return (
+    <>
+      <SEO title='Sign in - Spotify' description='Sign in to spotify and listen music worldwide.' />
+      <AuthForm mode='signin' />
+    </>
+  )
 }
 
 Signin.authPage = true
