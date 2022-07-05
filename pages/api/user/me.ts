@@ -9,5 +9,7 @@ export default validateRoute(async (req, res, user) => {
     },
   })
 
-  res.json({ ...user, playlistsCount })
+  const { password, ...noPasswordUser } = user
+
+  res.json({ ...noPasswordUser, playlistsCount })
 })

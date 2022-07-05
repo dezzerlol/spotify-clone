@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import GradientLayout from '../../components/GradientLayout'
+import GradientLayout from '../../components/Layout/GradientLayout'
 import SEO from '../../components/SEO'
 import SongTable from '../../components/SongTable'
 import { validateToken } from '../../lib/auth'
@@ -28,7 +28,7 @@ const Playlist = ({ playlist }) => {
         image={playlist.photo}
         subtitle='playlist'
         description={`${playlist.songs.length} songs`}>
-        <SongTable songs={playlist.songs} />
+        <SongTable songs={playlist.songs} type='playlist' />
       </GradientLayout>
     </>
   )

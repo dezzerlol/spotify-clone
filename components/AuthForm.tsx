@@ -50,7 +50,9 @@ const AuthForm = ({ mode }: IForm) => {
         borderBottom='1px solid lightgray'
         position='static'>
         <NextLink href='/signin' passHref>
-          <Image src='/Spotify_logo_black.svg' width='180' height='60' />
+          <a>
+            <Image src='/Spotify_logo_black.svg' width={180} height={60} />
+          </a>
         </NextLink>
       </Flex>
       {mode === 'signin' ? (
@@ -81,6 +83,7 @@ const AuthForm = ({ mode }: IForm) => {
                   onChange={(e) => setEmail(e.target.value)}
                   mb='1rem'
                   padding='25px'
+                  isRequired
                 />
                 <Input
                   placeholder='Password'
@@ -88,6 +91,7 @@ const AuthForm = ({ mode }: IForm) => {
                   onChange={(e) => setPassword(e.target.value)}
                   mb='1rem'
                   padding='25px'
+                  isRequired
                 />
               </Box>
               <NextLink href='/signin' passHref>

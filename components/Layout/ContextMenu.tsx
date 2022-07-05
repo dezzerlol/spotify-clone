@@ -13,7 +13,7 @@ export const ContextMenu = styled.div<ContextMenuProps>`
   z-index: 1000;
   width: 220px;
   background-color: #282828;
-  box-shadow: 0 16px 24px rgb(0 0 0 / 30%), 0 6px 8px rgb(0 0 0 / 20%);
+  box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.6);
   ${({ top, left }) => css`
     top: ${top}px;
     left: ${left}px;

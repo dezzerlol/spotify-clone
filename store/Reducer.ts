@@ -17,6 +17,7 @@ const initialState = {
   user: {},
   sidebarPlaylists: [{}],
   playlist: [{}],
+  searchValues: [],
 }
 
 const playlistReducer = (state = initialState, action) => {
@@ -52,6 +53,13 @@ const playlistReducer = (state = initialState, action) => {
       return {
         ...state,
         playlist: action.payload,
+      }
+    }
+
+    case 'SET_SEARCH_VALUES': {
+      return {
+        ...state,
+        searchValues: action.payload,
       }
     }
 
@@ -93,6 +101,13 @@ export const setPlaylist = (playlist) => {
   return {
     type: 'SET_PLAYLIST',
     payload: playlist,
+  }
+}
+
+export const setSearchValues = (values) => {
+  return {
+    type: 'SET_SEARCH_VALUES',
+    payload: values,
   }
 }
 

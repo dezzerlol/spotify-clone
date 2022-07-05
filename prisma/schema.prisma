@@ -1,7 +1,8 @@
 // Prisma schema file
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -21,17 +22,17 @@ model User {
 }
 
 model Song {
-  id         Int        @id @default(autoincrement())
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  name       String
-  artist     Artist     @relation(fields: [artistId], references: [id])
-  artistId   Int
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String
+  artist    Artist     @relation(fields: [artistId], references: [id])
+  artistId  Int
   //artistName String?
-  playlists  Playlist[]
-  duration   Int
-  url        String
-  photo      String?
+  playlists Playlist[]
+  duration  Int
+  url       String
+  photo     String?
 }
 
 model Artist {

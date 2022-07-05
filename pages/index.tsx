@@ -2,7 +2,7 @@ import { Box, Flex, SimpleGrid, Text } from '@chakra-ui/layout'
 import { Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
-import GradientLayout from '../components/GradientLayout'
+import GradientLayout from '../components/Layout/GradientLayout'
 import SEO from '../components/SEO'
 import prisma from '../lib/prisma'
 
@@ -29,7 +29,7 @@ const Home = ({ songs, playlists, artists }) => {
                 <Flex
                   key={playlist.id}
                   height='100px'
-                  bgColor='#181818'
+                  bgColor='var(--card-dark-bg)'
                   borderRadius='5px'
                   alignItems='center'
                   cursor='pointer'
@@ -72,7 +72,7 @@ const Home = ({ songs, playlists, artists }) => {
                 artists.slice(0, 5).map((artist) => (
                   <Flex
                     key={artist.id}
-                    bgColor='#181818'
+                    bgColor='var(--card-dark-bg)'
                     direction='column'
                     height='250px'
                     borderRadius='5px'
@@ -85,7 +85,7 @@ const Home = ({ songs, playlists, artists }) => {
                       marginLeft='auto'
                       marginRight='auto'
                       marginTop='20px'
-                      boxShadow='4px 4px 80px 5px rgba(0, 0, 0, 0.8)'
+                      boxShadow='4px 4px 30px 5px rgba(0, 0, 0, 0.8)'
                       src={artist.avatar ? artist.avatar : '/defaultPlaylist.jpg'}
                     />
                     <Box padding='20px 0px 0px 20px'>
@@ -120,7 +120,7 @@ const Home = ({ songs, playlists, artists }) => {
                 random.slice(0, 10).map((item) => (
                   <Flex
                     key={item.id}
-                    bgColor='#181818'
+                    bgColor='var(--card-dark-bg)'
                     direction='column'
                     height='250px'
                     borderRadius='5px'
@@ -134,7 +134,7 @@ const Home = ({ songs, playlists, artists }) => {
                       marginLeft='auto'
                       marginRight='auto'
                       marginTop='20px'
-                      boxShadow='4px 4px 80px 5px rgba(0, 0, 0, 0.8)'
+                      boxShadow='4px 4px 30px 5px rgba(0, 0, 0, 0.8)'
                       src={item.photo ? item.photo : item.avatar ? item.avatar : '/defaultPlaylist.jpg'}
                     />
                     <Box padding='20px 0px 0px 20px'>

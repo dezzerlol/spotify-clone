@@ -8,9 +8,9 @@ import { BsFillPlusSquareFill } from 'react-icons/bs'
 import { FiHome, FiSearch } from 'react-icons/fi'
 import { MdFavorite, MdLibraryMusic } from 'react-icons/md'
 import { useSWRConfig } from 'swr'
-import { usePlaylist, useStateWithDep } from '../lib/hooks'
+import { usePlaylist } from '../lib/hooks'
 import { createNewPlaylist, removePlaylist } from '../lib/mutations'
-import { ContextMenu } from './ContextMenu'
+import { ContextMenu } from './Layout/ContextMenu'
 
 const navMenu = [
   { name: 'Home', icon: FiHome, route: '/' },
@@ -105,7 +105,11 @@ const Sidebar = () => {
 
         <Divider color='gray.700' marginY='20px' />
 
-        <Box height='66%' overflowY='auto' paddingX='20px' sx={{ '::-webkit-scrollbar': { display: 'none' } }}>
+        <Box
+          height='66%'
+          overflowY='auto'
+          paddingX='20px'
+          sx={{ '::-webkit-scrollbar': { display: 'none' } }}>
           <List>
             {playlists
               ? playlists.map((playlist, index) => (

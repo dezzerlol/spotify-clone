@@ -16,7 +16,13 @@ const Playbar = () => {
   }
 
   return (
-    <Box height='100px' width='100vw' bg='blackAlpha.900' padding='10px' onContextMenu={(e) => e.preventDefault()}>
+    <Box
+      height='100px'
+      width='100vw'
+      bg='#181818'
+      padding='10px'
+      borderTop='1px solid #282828'
+      onContextMenu={(e) => e.preventDefault()}>
       <Flex align='center'>
         {activeSong ? (
           <Box padding='10px' color='white' width='20%' display='flex' alignItems='center'>

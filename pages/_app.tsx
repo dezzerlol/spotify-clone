@@ -2,6 +2,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { Provider } from 'react-redux'
 import PlayerLayout from '../components/playerLayout'
 import store from '../store/store'
+import '../styles/globals.css'
 
 const theme = extendTheme({
   colors: {

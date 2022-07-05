@@ -5,6 +5,7 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
+    jest: true,
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -14,6 +15,7 @@ module.exports = {
     ecmaVersion: 13,
     sourceType: 'module',
   },
+
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
@@ -55,5 +57,6 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'no-nested-ternary': 'off',
     'no-shadow': 'warn',
+    'import/no-extraneous-dependencies': 'warn',
   },
 }

@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from '@chakra-ui/layout'
 import { Image, Skeleton } from '@chakra-ui/react'
-import GradientLayout from '../../components/GradientLayout'
+import GradientLayout from '../../components/Layout/GradientLayout'
 import { validateToken } from '../../lib/auth'
 import { useMe } from '../../lib/hooks'
 import prisma from '../../lib/prisma'
@@ -28,7 +28,7 @@ const User = ({ artists }) => {
             artists.map((artist) => (
               <Box paddingX='10px' width='15%' key={artist.name} cursor='pointer'>
                 <Box
-                  bgColor='#181818'
+                  bgColor='var(--card-dark-bg)'
                   borderRadius='5px'
                   padding='15px'
                   width='200px'

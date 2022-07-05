@@ -1,7 +1,6 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/layout'
 import {
   Button,
-  IconButton,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -18,16 +17,21 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { AiOutlineClockCircle } from 'react-icons/ai'
-import { BsFillPlayFill, BsPlayFill } from 'react-icons/bs'
-import { HiHeart } from 'react-icons/hi'
+import { BsPlayFill } from 'react-icons/bs'
 import { useDispatch } from 'react-redux'
 import { formatDate, formatTime } from '../lib/formatter'
 import { usePlaylist, useStateWithDep } from '../lib/hooks'
 import { addToPlaylist, removeFromPlaylist } from '../lib/mutations'
 import { changeActiveSong, changeActiveSongs } from '../store/Reducer'
-import { ContextMenu } from './ContextMenu'
+import { ContextMenu } from './Layout/ContextMenu'
+import Buttons from './SongTable/Buttons'
 
-const SongTable = ({ songs }) => {
+interface IProps {
+  songs: []
+  type: 'search' | 'playlist'
+}
+
+const SongTable = ({ songs, type }: IProps) => {
   const { playlists } = usePlaylist()
   const router = useRouter()
   const dispatch = useDispatch()
@@ -59,20 +63,9 @@ const SongTable = ({ songs }) => {
   }, [])
 
   return (
-    <Box bg='transparent' color='white'>
+    <Box bg='transparent' color='white' width='100%'>
       <Box padding='10px' marginBottom='20px'>
-        <Box marginBottom='30px' marginLeft='10px' display='flex' alignItems='center'>
-          <IconButton
-            icon={<BsFillPlayFill fontSize='30px' />}
-            colorScheme='green'
-            size='lg'
-            isRound
-            aria-label='play'
-            onClick={() => handlePlay()}
-            mr='25px'
-          />
-          <IconButton icon={<HiHeart fontSize='40px' color='#1DB954' />} size='lg' aria-label='fav' variant='link' />
-        </Box>
+        {type === 'playlist' ? <Buttons handlePlay={handlePlay} /> : ''}
         <Table variant='unstyled'>
           <Thead borderBottom='1px solid' borderColor='rgba(255,255,255, 0.2)'>
             <Tr color='gray.400'>
@@ -120,13 +113,13 @@ const SongTable = ({ songs }) => {
                     </Box>
                   </Flex>
                 </Td>
-                <Td color='gray.400'>{formatDate(song.createdAt)}</Td>
+                <Td color='gray.400'>{formatDate(new Date(song.createdAt))}</Td>
                 <Td color='gray.400'> {formatTime(song.duration)}</Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
-        
+
         {show && (
           <Popover
             autoFocus={false}

@@ -34,3 +34,7 @@ export const addToPlaylist = (body: { playlistId: number; songId: number }) => {
 export const removeFromPlaylist = (body: { playlistId: number; songId: number }) => {
   return fetcher('/playlists/removeSong', body)
 }
+
+export const searchInDb = (body: { searchValue: string }) => {
+  return fetcher('/search', body)
+}

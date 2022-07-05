@@ -15,6 +15,7 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
+  // if token exists redirect to home page
   if (token && (req.nextUrl.pathname === '/signin' || req.nextUrl.pathname === '/signup')) {
     url.pathname = '/'
     return NextResponse.redirect(url)
