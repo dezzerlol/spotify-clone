@@ -15,7 +15,8 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useSWRConfig } from 'swr'
-import { changeUsername, renamePlaylist } from '../lib/mutations'
+import { API_GET_PLAYLISTS } from '../services/apiConsts'
+import { changeUsername, renamePlaylist } from '../services/mutations'
 
 interface IProps {
   onClose: () => void
@@ -47,7 +48,7 @@ const PlaylistModal = (props: IProps) => {
     setPageTitle(inputTitle)
     if (subtitle === 'playlist') {
       await renamePlaylist({ id, newName: inputTitle })
-      mutate('/playlists/playlist')
+      mutate(API_GET_PLAYLISTS)
     } else if (subtitle === 'profile') {
       await changeUsername({ newUsername: inputTitle })
     }

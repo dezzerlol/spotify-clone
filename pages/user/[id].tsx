@@ -1,7 +1,7 @@
 import { Box, Flex, Text } from '@chakra-ui/layout'
 import { Image, Skeleton } from '@chakra-ui/react'
 import GradientLayout from '../../components/Layout/GradientLayout'
-import { validateToken } from '../../lib/auth'
+import { validateToken } from '../../services/auth'
 import { useMe } from '../../lib/hooks'
 import prisma from '../../lib/prisma'
 

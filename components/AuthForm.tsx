@@ -5,7 +5,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { auth } from '../lib/mutations'
+import { auth } from '../services/mutations'
 import { setUser } from '../store/Reducer'
 
 // FIXME on production build loading spinner on button stops while request is still going

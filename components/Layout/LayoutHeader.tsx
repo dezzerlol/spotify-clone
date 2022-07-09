@@ -17,7 +17,7 @@ import { useCallback, useState } from 'react'
 import { FaRegUser } from 'react-icons/fa'
 import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle, IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, searchInDb } from '../../lib/mutations'
+import { logout, searchInDb } from '../../services/mutations'
 import { setSearchValues } from '../../store/Reducer'
 
 type IProps = {

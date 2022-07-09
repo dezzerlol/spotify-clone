@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import jwt from 'jsonwebtoken'
-import prisma from './prisma'
+import prisma from '../lib/prisma'
 
 interface JwtPayload {
   id: number

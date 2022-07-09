@@ -6,7 +6,7 @@ import GradientLayout from '../components/Layout/GradientLayout'
 import SEO from '../components/SEO'
 import prisma from '../lib/prisma'
 
-const Home = ({ songs, playlists, artists }) => {
+const Home = ({ playlists, artists }) => {
   const activeSong = useSelector((state: any) => state.playlistReducer.activeSong)
   const router = useRouter()
   const random = playlists.concat(artists)
@@ -156,12 +156,11 @@ const Home = ({ songs, playlists, artists }) => {
 }
 
 export const getServerSideProps = async () => {
-  const songs = await prisma.song.findMany({})
   const playlists = await prisma.playlist.findMany({})
   const artists = await prisma.artist.findMany({})
 
   return {
-    props: { songs, playlists, artists },
+    props: { playlists, artists },
   }
 }
 

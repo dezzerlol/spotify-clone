@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import GradientLayout from '../../components/Layout/GradientLayout'
 import SEO from '../../components/SEO'
 import SongTable from '../../components/SongTable'
-import { validateToken } from '../../lib/auth'
+import { validateToken } from '../../services/auth'
 import prisma from '../../lib/prisma'
 
 const getGBColor = (id) => {
@@ -50,7 +50,6 @@ export const getServerSideProps = async ({ query, req }) => {
   const [playlist] = await prisma.playlist.findMany({
     where: {
       id: +query.id,
-      userId: user.id,
     },
     include: {
       songs: {

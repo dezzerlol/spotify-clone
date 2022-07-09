@@ -16,7 +16,8 @@ const Search = () => {
       height='100%'
       width='100%'
       overflowY='auto'
-      color='white'>
+      color='white'
+      onContextMenu={(e) => e.preventDefault()}>
       <LayoutHeader bgcolor='white' type='search' />
       {searchValues && <SongTable songs={searchValues} type='search' />}
     </Flex>

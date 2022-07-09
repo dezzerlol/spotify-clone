@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
+import { API_GET_PLAYLISTS, API_GET_USER } from '../services/apiConsts'
 import fetcher from './fetcher'
 
 interface useMeReturn {
@@ -19,7 +20,7 @@ interface usePlaylistReturn {
 
 // call api 'me'
 export const useMe = (): useMeReturn => {
-  const { data, error } = useSWR('/user/me', fetcher)
+  const { data, error } = useSWR(API_GET_USER, fetcher)
 
   return {
     user: data,
@@ -30,7 +31,7 @@ export const useMe = (): useMeReturn => {
 
 // call api 'playlist'
 export const usePlaylist = (): usePlaylistReturn => {
-  const { data, error } = useSWR('/playlists/playlist', fetcher)
+  const { data, error } = useSWR(API_GET_PLAYLISTS, fetcher)
 
   return {
     playlists: (data as any) || [],

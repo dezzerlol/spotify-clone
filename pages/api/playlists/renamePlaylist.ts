@@ -1,4 +1,4 @@
-import { validateRoute } from '../../../lib/auth'
+import { validateRoute } from '../../../services/auth'
 import prisma from '../../../lib/prisma'
 
 // renaming playlist

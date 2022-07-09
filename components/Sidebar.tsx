@@ -9,7 +9,8 @@ import { FiHome, FiSearch } from 'react-icons/fi'
 import { MdFavorite, MdLibraryMusic } from 'react-icons/md'
 import { useSWRConfig } from 'swr'
 import { usePlaylist } from '../lib/hooks'
-import { createNewPlaylist, removePlaylist } from '../lib/mutations'
+import { API_GET_PLAYLISTS } from '../services/apiConsts'
+import { createNewPlaylist, removePlaylist } from '../services/mutations'
 import { ContextMenu } from './Layout/ContextMenu'
 
 const navMenu = [
@@ -21,25 +22,25 @@ const navMenu = [
 const Sidebar = () => {
   const { playlists } = usePlaylist()
   const { mutate } = useSWRConfig()
-  const [show, setShow] = useState(false)
+  const [isShow, setIsShow] = useState(false)
   const [clickedPlaylist, setClickedPlaylist] = useState()
   const [points, setPoints] = useState({ x: 0, y: 0 })
   const router = useRouter()
 
-  const createPlaylist = async () => {
+  const handleCreatePlaylist = async () => {
     const data = await createNewPlaylist()
     router.push(`/playlist/${data.newPlaylist.id}`)
-    mutate('/playlists/playlist')
+    mutate(API_GET_PLAYLISTS)
   }
 
-  const deletePlaylist = async (playlistId) => {
-    const data = await removePlaylist({ playlistId })
-    mutate('/playlists/playlist')
+  const handleDeletePlaylist = async (playlistId) => {
+    await removePlaylist({ playlistId })
+    mutate(API_GET_PLAYLISTS)
   }
 
   // closing context menu on outside click
   useEffect(() => {
-    const handleClick = () => setShow(false)
+    const handleClick = () => setIsShow(false)
     window.addEventListener('click', handleClick)
     return () => window.removeEventListener('click', handleClick)
   }, [])
@@ -53,8 +54,10 @@ const Sidebar = () => {
       color='gray'
       onContextMenu={(e) => e.preventDefault()}>
       <Box paddingY='20px' height='100%'>
-        <Box width='200px' marginBottom='20px' paddingX='20px'>
-          <Image src='/Spotify_logo.svg' width={140} height={60} />
+        <Box width='200px' marginBottom='20px' paddingX='20px' cursor='pointer'>
+          <Link href='/' passHref>
+            <Image src='/Spotify_logo.svg' width={140} height={60} />
+          </Link>
         </Box>
 
         <Box marginBottom='20px'>
@@ -81,7 +84,7 @@ const Sidebar = () => {
 
         <Box marginTop='20px'>
           <List spacing={2}>
-            <ListItem paddingX='20px' paddingY='5px' fontSize='16px' onClick={createPlaylist}>
+            <ListItem paddingX='20px' paddingY='5px' fontSize='16px' onClick={handleCreatePlaylist}>
               <Button variant='link' sx={{ '&:hover': { color: 'white', textDecoration: 'none' } }}>
                 <LinkOverlay display='flex' alignItems='center'>
                   <ListIcon as={BsFillPlusSquareFill} marginRight='20px' width='25px' height='25px' />
@@ -105,11 +108,7 @@ const Sidebar = () => {
 
         <Divider color='gray.700' marginY='20px' />
 
-        <Box
-          height='66%'
-          overflowY='auto'
-          paddingX='20px'
-          sx={{ '::-webkit-scrollbar': { display: 'none' } }}>
+        <Box height='66%' overflowY='auto' paddingX='20px' sx={{ '::-webkit-scrollbar': { display: 'none' } }}>
           <List>
             {playlists
               ? playlists.map((playlist, index) => (
@@ -122,7 +121,7 @@ const Sidebar = () => {
                       sx={{ '&:hover': { color: 'white' } }}
                       onContextMenu={(e) => {
                         e.preventDefault()
-                        setShow(true)
+                        setIsShow(true)
                         setClickedPlaylist(playlist.id)
                         if (index > 6) {
                           setPoints({ x: e.pageX, y: e.pageY - 300 })
@@ -139,7 +138,7 @@ const Sidebar = () => {
               : ''}
           </List>
         </Box>
-        {show && (
+        {isShow && (
           <ContextMenu top={points.y} left={points.x}>
             <ul>
               <li>
@@ -190,7 +189,7 @@ const Sidebar = () => {
               </li>
               <li>
                 <Button
-                  onClick={() => deletePlaylist(clickedPlaylist)}
+                  onClick={() => handleDeletePlaylist(clickedPlaylist)}
                   variant='link'
                   color='white'
                   fontWeight='400'
@@ -217,7 +216,7 @@ const Sidebar = () => {
                   color='white'
                   fontWeight='400'
                   fontSize='14px'
-                  onClick={createPlaylist}
+                  onClick={handleCreatePlaylist}
                   sx={{ '&:hover': { textDecoration: 'none' } }}>
                   Create playlist
                 </Button>

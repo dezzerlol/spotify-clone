@@ -1,4 +1,4 @@
-import { validateRoute } from '../../../lib/auth'
+import { validateRoute } from '../../../services/auth'
 import prisma from '../../../lib/prisma'
 
 // getiing playlists with validating route so another user cant get logged user playlists
