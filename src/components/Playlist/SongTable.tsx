@@ -1,4 +1,3 @@
-import { Box, Divider, Flex, Text } from '@chakra-ui/layout'
 import {
   Button,
   Popover,
@@ -12,6 +11,10 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  Box,
+  Divider,
+  Flex,
+  Text,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'

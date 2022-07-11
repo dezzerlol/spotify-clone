@@ -29,6 +29,8 @@ type Props = {
   setPageTitle: (arg: string) => void
 }
 
+// BUG: modal bugged after closing (chakra ui react 18 problem)
+
 const PlaylistModal = (props: Props) => {
   const { onClose, isOpen, image, roundImage, subtitle, id, pageTitle, setPageTitle } = props
   const { mutate } = useSWRConfig()

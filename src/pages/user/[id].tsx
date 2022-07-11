@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from '@chakra-ui/layout'
 import { Image, Skeleton } from '@chakra-ui/react'
+import Card from '../../components/Card/Card'
 import GradientLayout from '../../components/Playlist/GradientLayout'
 import { validateToken } from '../../middleware/auth'
 import { useMe } from '../../utils/hooks'
@@ -26,32 +27,7 @@ const User = ({ artists }) => {
         <Flex wrap='wrap' gap='1rem'>
           {artists &&
             artists.map((artist) => (
-              <Box paddingX='10px' width='15%' key={artist.name} cursor='pointer'>
-                <Box
-                  bgColor='var(--card-dark-bg)'
-                  borderRadius='5px'
-                  padding='15px'
-                  width='200px'
-                  height='250px'
-                  sx={{ '&:hover': { bgColor: 'gray.900' } }}>
-                  <Image
-                    src={artist.avatar ? artist.avatar : '/defaultPlaylist.jpg'}
-                    boxSize='140px'
-                    borderRadius='50%'
-                    marginLeft='auto'
-                    marginRight='auto'
-                    boxShadow='4px 4px 80px 5px rgba(0, 0, 0, 0.8)'
-                  />
-                  <Box marginTop='20px'>
-                    <Text fontSize='large' fontWeight='bold'>
-                      {artist.name}
-                    </Text>
-                    <Text fontSize='small' color='gray.500'>
-                      Artist
-                    </Text>
-                  </Box>
-                </Box>
-              </Box>
+              <Card item={artist} key={artist.id}/>
             ))}
         </Flex>
       </Box>
