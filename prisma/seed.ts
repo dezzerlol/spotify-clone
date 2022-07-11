@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import prisma from '../utils/prisma'
+import prisma from '../src/utils/prisma'
 import { artistsData } from './songsData'
 
 // seeding db with data
