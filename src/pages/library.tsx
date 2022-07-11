@@ -15,7 +15,8 @@ const Library = () => {
       direction='column'
       bgColor='var(--dark-bg)'
       height='100%'
-      color='white'>
+      color='white'
+      overflowY='auto'>
       <LayoutHeader bgcolor='white' />
       <Flex padding='20px' direction='column'>
         <Text fontSize='28px' fontWeight='600' color='white' mb='1rem'>
@@ -26,10 +27,11 @@ const Library = () => {
           <Flex
             justifyContent='start'
             alignItems='end'
-            width='400px'
+            width='430px'
             height='250px'
             borderRadius='5px'
-            background='linear-gradient(149.46deg,#450af5,#8e8ee5 99.16%)'>
+            background='linear-gradient(149.46deg,#450af5,#8e8ee5 99.16%)'
+            cursor='pointer'>
             <Box padding='20px'>
               <Text fontSize='24px' fontWeight='600'>
                 Favorite tracks
@@ -55,7 +57,7 @@ const Library = () => {
                     marginRight='auto'
                     marginTop='20px'
                     boxShadow='4px 4px 30px 5px rgba(0, 0, 0, 0.8)'
-                    src={item.photo ? item.photo : item.avatar ? item.avatar : '/defaultPlaylist.jpg'}
+                    src={item.photo ? item.photo : '/defaultPlaylist.jpg'}
                   />
                   <Box padding='20px 0px 0px 20px'>
                     <Text fontWeight='600' fontSize='18px'>

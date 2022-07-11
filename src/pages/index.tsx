@@ -1,15 +1,21 @@
-import { Box, Flex, SimpleGrid, Text } from '@chakra-ui/layout'
-import { Image } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
+import { Box, Flex, SimpleGrid, Text } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
+import Card from '../components/Card/Card'
+import MainPageCard from '../components/Card/MainPageCard'
 import GradientLayout from '../components/Playlist/GradientLayout'
 import SEO from '../components/SEO'
+import { Artist } from '../types/artist'
+import { IPlaylist } from '../types/playlist'
 import prisma from '../utils/prisma'
 
-const Home = ({ playlists, artists }) => {
+type Props = {
+  playlists: IPlaylist[]
+  artists: Artist[]
+}
+
+const Home = ({ playlists, artists }: Props) => {
   const activeSong = useSelector((state: any) => state.playlistReducer.activeSong)
-  const router = useRouter()
-  const random = playlists.concat(artists)
+  const random = [...playlists, ...artists]
 
   return (
     <>
@@ -25,29 +31,7 @@ const Home = ({ playlists, artists }) => {
           </Text>
           <SimpleGrid minChildWidth='400px' spacing='20px' paddingY='20px'>
             {playlists &&
-              playlists.slice(0, 6).map((playlist) => (
-                <Flex
-                  key={playlist.id}
-                  height='100px'
-                  bgColor='var(--card-dark-bg)'
-                  borderRadius='5px'
-                  alignItems='center'
-                  cursor='pointer'
-                  onClick={() => router.push(`/playlist/${playlist.id}`)}
-                  sx={{ '&:hover': { bgColor: 'gray.900' } }}>
-                  <Image
-                    objectFit='cover'
-                    width={100}
-                    height={100}
-                    src={playlist.photo ? playlist.photo : '/defaultPlaylist.jpg'}
-                    boxShadow='10px 5px 5px -5px rgba(0, 0, 0, 0.4)'
-                    borderRadius='2px'
-                  />
-                  <Text paddingLeft='10px' fontSize='16px' fontWeight='600'>
-                    {playlist.name}
-                  </Text>
-                </Flex>
-              ))}
+              playlists.slice(0, 6).map((playlist) => <MainPageCard playlist={playlist} key={playlist.id} />)}
           </SimpleGrid>
 
           <Box paddingY='20px'>
@@ -68,36 +52,7 @@ const Home = ({ playlists, artists }) => {
               </Box>
             </Flex>
             <SimpleGrid minChildWidth='200px' spacing='90px' paddingY='20px'>
-              {artists &&
-                artists.slice(0, 5).map((artist) => (
-                  <Flex
-                    key={artist.id}
-                    bgColor='var(--card-dark-bg)'
-                    direction='column'
-                    height='250px'
-                    borderRadius='5px'
-                    width='200px'
-                    cursor='pointer'
-                    sx={{ '&:hover': { bgColor: 'gray.900' } }}>
-                    <Image
-                      boxSize='140px'
-                      borderRadius='50%'
-                      marginLeft='auto'
-                      marginRight='auto'
-                      marginTop='20px'
-                      boxShadow='4px 4px 30px 5px rgba(0, 0, 0, 0.8)'
-                      src={artist.avatar ? artist.avatar : '/defaultPlaylist.jpg'}
-                    />
-                    <Box padding='20px 0px 0px 20px'>
-                      <Text fontWeight='600' fontSize='18px'>
-                        {artist.name}
-                      </Text>
-                      <Text fontSize='14px' color='gray.400'>
-                        Artist
-                      </Text>
-                    </Box>
-                  </Flex>
-                ))}
+              {artists && artists.slice(0, 5).map((artist) => <Card item={artist} key={artist.id} />)}
             </SimpleGrid>
           </Box>
 
@@ -116,37 +71,7 @@ const Home = ({ playlists, artists }) => {
               </Box>
             </Flex>
             <SimpleGrid minChildWidth='200px' spacing='90px' paddingY='20px'>
-              {artists &&
-                random.slice(0, 10).map((item) => (
-                  <Flex
-                    key={item.id}
-                    bgColor='var(--card-dark-bg)'
-                    direction='column'
-                    height='250px'
-                    borderRadius='5px'
-                    width='200px'
-                    cursor='pointer'
-                    sx={{ '&:hover': { bgColor: 'gray.900' } }}>
-                    <Image
-                      boxSize='140px'
-                      borderRadius={item.userId ? '' : '50%'}
-                      objectFit='cover'
-                      marginLeft='auto'
-                      marginRight='auto'
-                      marginTop='20px'
-                      boxShadow='4px 4px 30px 5px rgba(0, 0, 0, 0.8)'
-                      src={item.photo ? item.photo : item.avatar ? item.avatar : '/defaultPlaylist.jpg'}
-                    />
-                    <Box padding='20px 0px 0px 20px'>
-                      <Text fontWeight='600' fontSize='18px'>
-                        {item.name}
-                      </Text>
-                      <Text fontSize='14px' color='gray.400'>
-                        {item.userId ? 'Playlist' : 'Artist'}
-                      </Text>
-                    </Box>
-                  </Flex>
-                ))}
+              {artists && random.slice(0, 10).map((item) => <Card item={item} key={item.id} />)}
             </SimpleGrid>
           </Box>
         </Box>

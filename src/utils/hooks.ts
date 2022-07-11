@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { SetStateAction, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { API_GET_PLAYLISTS, API_GET_USER } from '../services/apiConsts'
 import { IUser } from '../types/user'
@@ -42,11 +42,12 @@ export const usePlaylist = (): usePlaylistReturn => {
 }
 
 // use state with dependancy
-export function useStateWithDep(defaultValue: any) {
+export function useStateWithDep<S>(defaultValue): [S, React.Dispatch<SetStateAction<S>>] {
   const [value, setValue] = useState(defaultValue)
 
   useEffect(() => {
     setValue(defaultValue)
   }, [defaultValue])
+
   return [value, setValue]
 }

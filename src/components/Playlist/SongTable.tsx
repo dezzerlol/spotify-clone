@@ -25,9 +25,10 @@ import { addToPlaylist, removeFromPlaylist } from '../../services/mutations'
 import { changeActiveSong, changeActiveSongs } from '../../store/Reducer'
 import { ContextMenu } from '../../styles/ContextMenu'
 import Buttons from './TableButtons'
+import { Song } from '../../types/song'
 
 type Props = {
-  songs: []
+  songs: Song[]
   type: 'search' | 'playlist'
 }
 
@@ -36,7 +37,7 @@ const SongTable = ({ songs, type }: Props) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { isOpen, onToggle, onClose } = useDisclosure()
-  const [allSongs, setAllSongs] = useStateWithDep(songs)
+  const [allSongs, setAllSongs] = useStateWithDep<Song[]>(songs)
   const [isShow, setIsShow] = useState(false)
   const [points, setPoints] = useState({ x: 0, y: 0 })
   const [clickedSong, setClickedSong] = useState(1)
@@ -61,8 +62,6 @@ const SongTable = ({ songs, type }: Props) => {
     window.addEventListener('click', handleClick)
     return () => window.removeEventListener('click', handleClick)
   }, [])
-
-  console.log(playlists)
 
   return (
     <Box bg='transparent' color='white' width='100%'>

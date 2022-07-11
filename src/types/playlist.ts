@@ -1,4 +1,4 @@
-export interface IPlaylist {
+export type IPlaylist = {
   id: number
   createdAt: Date
   updatedAt: Date

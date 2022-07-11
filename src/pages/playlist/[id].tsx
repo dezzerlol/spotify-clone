@@ -5,14 +5,15 @@ import SEO from '../../components/SEO'
 import SongTable from '../../components/Playlist/SongTable'
 import { validateToken } from '../../middleware/auth'
 import prisma from '../../utils/prisma'
+import { getGBColor } from '../../utils/getGBColor'
+import { IPlaylist } from '../../types/playlist'
+import { Song } from '../../types/song'
 
-const getGBColor = (id) => {
-  const colors = ['red', 'green', 'blue', 'orange', 'gray', 'purple', 'yellow', 'teal']
-  return colors[id - 1] || colors[Math.floor(Math.random() * colors.length)]
-}
+type IProps = IPlaylist & { songs: Song[] }
 
-const Playlist = ({ playlist }) => {
+const Playlist = ({ playlist }: { playlist: IProps }) => {
   const activeSong = useSelector((state: any) => state.playlistReducer.activeSong)
+
   return (
     <>
       <SEO
